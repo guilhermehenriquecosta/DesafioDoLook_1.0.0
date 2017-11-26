@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 /**
  * Created by Guilherme on 15/11/2017.
@@ -22,8 +25,9 @@ import android.widget.TextView;
 public class LoginActivity extends Activity{
 
     private static final String TAG = "LoginActivity";
-
     private Context mContext = LoginActivity.this;
+    private User user;
+    public static JSONObject dataResult = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +39,8 @@ public class LoginActivity extends Activity{
         ImageView imgLogo = (ImageView)findViewById(R.id.imgLogoLogin);
         Button btnLogar = (Button)findViewById(R.id.btnLogar);
         TextView txtLinkBackLogin = (TextView) findViewById(R.id.txtLinkBackLogin);
-        EditText edtUser = (EditText) findViewById(R.id.edtUser);
-        EditText edtPassword = (EditText) findViewById(R.id.edtPassword);
+        final EditText edtUser = (EditText) findViewById(R.id.edtUser);
+        final EditText edtPassword = (EditText) findViewById(R.id.edtPassword);
 
         //Set fonts of texts
         txtLinkBackLogin.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/gravitybold.otf"));
@@ -48,12 +52,37 @@ public class LoginActivity extends Activity{
         btnLogar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("isLogged", true);
-                editor.commit();
-                Intent intent = new Intent(mContext, MainActivity.class);
-                mContext.startActivity(intent);
+                JSONObject data = new JSONObject();
+
+                try
+                {
+                    data.put("email_user", edtUser.getText().toString());
+                    data.put("password_user", edtPassword.getText().toString());
+
+                    new WebserviceTask(mContext, new WebserviceTask.AsyncResponse() {
+                        @Override
+                        public void processFinish(Context context, String result) {
+                            if(result != null) {
+                                Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }).execute("http://www.appointweb.com.br/desafioDoLookApp/controller/users/get_user.php", data);
+
+                    if (!dataResult.get("return").toString().equals("false")) {
+                        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean("isLogged", true);
+                        editor.putInt("userID", Integer.parseInt(dataResult.get("userInfoID").toString()));
+                        editor.commit();
+                        Intent intent = new Intent(mContext, MainActivity.class);
+                        mContext.startActivity(intent);
+                    } else {
+                        Toast.makeText(mContext, "User não encontrado", Toast.LENGTH_LONG).show();
+                    }
+                    dataResult = null;
+                } catch (Exception ex) {
+                    Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
 

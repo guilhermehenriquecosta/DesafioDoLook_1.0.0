@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "HomeActivity";
     private static final int ACTIVITY_NUM = 1;
+    public static JSONObject dataResult = new JSONObject();
 
     private Context mContext = MainActivity.this;
 
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("isLogged", false);
+            editor.putInt("userID", 0);
             editor.commit();
             Intent intent1 = new Intent(mContext, HomeActivity.class);
             mContext.startActivity(intent1);

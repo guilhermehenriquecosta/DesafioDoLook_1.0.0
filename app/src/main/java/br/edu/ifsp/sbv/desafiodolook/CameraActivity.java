@@ -95,6 +95,7 @@ public class CameraActivity extends AppCompatActivity
             SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("isLogged", false);
+            editor.putInt("userID", 0);
             editor.commit();
             Intent intent1 = new Intent(mContext, HomeActivity.class);
             mContext.startActivity(intent1);

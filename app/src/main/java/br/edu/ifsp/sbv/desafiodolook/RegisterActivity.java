@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import org.json.JSONObject;
+import android.provider.Settings.Secure;
 
 /**
  * Created by Guilherme on 21/11/2017.
@@ -20,8 +23,9 @@ import android.widget.TextView;
 public class RegisterActivity extends Activity {
 
     private static final String TAG = "LoginActivity";
-
     private Context mContext = RegisterActivity.this;
+    private User user;
+    public static JSONObject dataResult = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +37,10 @@ public class RegisterActivity extends Activity {
         ImageView imgLogo = (ImageView)findViewById(R.id.imgLogoRegister);
         Button btnRegistrar = (Button)findViewById(R.id.btnRegistrar);
         TextView txtLinkBackRegister = (TextView) findViewById(R.id.txtLinkBackRegister);
-        EditText edtEmail = (EditText) findViewById(R.id.edtEmail);
-        EditText edtUserRegister = (EditText) findViewById(R.id.edtUserRegister);
-        EditText edtPasswordRegister = (EditText) findViewById(R.id.edtPasswordRegister);
-        EditText edtPasswordConfirm = (EditText) findViewById(R.id.edtPasswordConfirm);
+        final EditText edtEmail = (EditText) findViewById(R.id.edtEmail);
+        final EditText edtUserRegister = (EditText) findViewById(R.id.edtUserRegister);
+        final EditText edtPasswordRegister = (EditText) findViewById(R.id.edtPasswordRegister);
+        final EditText edtPasswordConfirm = (EditText) findViewById(R.id.edtPasswordConfirm);
 
         //Set fonts of texts
         txtLinkBackRegister.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/gravitybold.otf"));
@@ -50,12 +54,53 @@ public class RegisterActivity extends Activity {
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("isLogged", true);
-                editor.commit();
-                Intent intent = new Intent(mContext, MainActivity.class);
-                mContext.startActivity(intent);
+                JSONObject data = new JSONObject();
+
+                try
+                {
+                    data.put("name_user", edtUserRegister.getText().toString());
+                    data.put("email_user", edtEmail.getText().toString());
+                    data.put("password_user", edtPasswordConfirm.getText().toString());
+                    data.put("id_device", Secure.getString(getContentResolver(), Secure.ANDROID_ID));
+
+                    new WebserviceTask(mContext, new WebserviceTask.AsyncResponse() {
+                        @Override
+                        public void processFinish(Context context, String result) {
+                            if(result != null) {
+                                Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }).execute("http://www.appointweb.com.br/desafioDoLookApp/controller/users/create_user.php", data);
+
+                    data = new JSONObject();
+
+                    data.put("email_user", edtUserRegister.getText().toString());
+                    data.put("password_user", edtPasswordConfirm.getText().toString());
+
+                    new WebserviceTask(mContext, new WebserviceTask.AsyncResponse() {
+                        @Override
+                        public void processFinish(Context context, String result) {
+                            if(result != null) {
+                                Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }).execute("http://www.appointweb.com.br/desafioDoLookApp/controller/users/get_user.php", data);
+
+                    if (!dataResult.get("return").toString().equals("false")) {
+                        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean("isLogged", true);
+                        editor.putInt("userID",Integer.parseInt(dataResult.get("userID").toString()));
+                        editor.commit();
+                        Intent intent = new Intent(mContext, MainActivity.class);
+                        mContext.startActivity(intent);
+                    } else {
+                        Toast.makeText(mContext, "Usuário não encontrado", Toast.LENGTH_LONG).show();
+                    }
+                    dataResult = null;
+                } catch (Exception ex) {
+                    Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
 
