@@ -59,29 +59,39 @@ public class LoginActivity extends Activity{
                     data.put("email_user", edtUser.getText().toString());
                     data.put("password_user", edtPassword.getText().toString());
 
-                    new WebserviceTask(mContext, new WebserviceTask.AsyncResponse() {
+                    new WebserviceTask(mContext, new WebserviceTask.RespostaAssincrona() {
                         @Override
-                        public void processFinish(Context context, String result) {
-                            if(result != null) {
-                                Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+                        public void fimProcessamento(Context objContexto, JSONObject ObjDadosRetorno) {
+                            try
+                            {
+                                if(ObjDadosRetorno != null) {
+                                    Toast.makeText(objContexto, ObjDadosRetorno.get("return").toString(), Toast.LENGTH_LONG).show();
+
+                                    if(ObjDadosRetorno.has("userInfo") && !ObjDadosRetorno.isNull("userInfo")) {
+
+                                        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putBoolean("isLogged", true);
+                                        editor.putInt("userID", Integer.parseInt(ObjDadosRetorno.getJSONObject("userInfo").get("userInfoID").toString()));
+                                        editor.commit();
+                                        Intent intent = new Intent(mContext, MainActivity.class);
+                                        mContext.startActivity(intent);
+                                    }
+                                }
+                            } catch (Exception objExcecao) {
+                                Toast.makeText(mContext, "User não encontrado", Toast.LENGTH_LONG).show();
                             }
                         }
-                    }).execute("http://www.appointweb.com.br/desafioDoLookApp/controller/users/get_user.php", data);
 
-                    if (!dataResult.get("return").toString().equals("false")) {
-                        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putBoolean("isLogged", true);
-                        editor.putInt("userID", Integer.parseInt(dataResult.get("userInfoID").toString()));
-                        editor.commit();
-                        Intent intent = new Intent(mContext, MainActivity.class);
-                        mContext.startActivity(intent);
-                    } else {
-                        Toast.makeText(mContext, "User não encontrado", Toast.LENGTH_LONG).show();
-                    }
-                    dataResult = null;
-                } catch (Exception ex) {
-                    Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                        @Override
+                        public void erroAssincrono(Context objContexto, Exception objExcecao) {
+                            Toast.makeText(objContexto, "Erro: " + objExcecao.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }).execute("http://www.appointweb.com/Imagem/exuser.php", data);
+                    //http://www.appointweb.com/Imagem/exuser.php
+                    //http://www.appointweb.com.br/desafioDoLookApp/controller/users/get_user.php
+                } catch(Exception ex) {
+                    Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });

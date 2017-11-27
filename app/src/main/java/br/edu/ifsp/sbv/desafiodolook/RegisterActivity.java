@@ -63,7 +63,7 @@ public class RegisterActivity extends Activity {
                     data.put("password_user", edtPasswordConfirm.getText().toString());
                     data.put("id_device", Secure.getString(getContentResolver(), Secure.ANDROID_ID));
 
-                    new WebserviceTask(mContext, new WebserviceTask.AsyncResponse() {
+                    /*new WebserviceTask(mContext, new WebserviceTask.AsyncResponse() {
                         @Override
                         public void processFinish(Context context, String result) {
                             if(result != null) {
@@ -97,7 +97,7 @@ public class RegisterActivity extends Activity {
                     } else {
                         Toast.makeText(mContext, "Usuário não encontrado", Toast.LENGTH_LONG).show();
                     }
-                    dataResult = null;
+                    dataResult = null;*/
                 } catch (Exception ex) {
                     Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
                 }

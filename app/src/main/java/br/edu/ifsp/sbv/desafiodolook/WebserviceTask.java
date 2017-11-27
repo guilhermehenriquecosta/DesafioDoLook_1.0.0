@@ -16,86 +16,89 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class WebserviceTask extends AsyncTask<Object, Void, String> {
-    private HttpURLConnection con;
-    private URL url;
-    private OutputStream os;
-    private BufferedReader in;
-    private JSONObject data = new JSONObject();
+public class WebserviceTask extends AsyncTask<Object, Void, JSONObject> {
+    private HttpURLConnection objConexao;
+    private URL objURL;
+    private OutputStream objFluxoSaida;
+    private BufferedReader objLeitorBuffer;
+    private JSONObject objDadosEnvio = new JSONObject();
+    private ProgressDialog objDialogoProcesso;
+    private Context objContexto;
+    private Exception objExcecaoAssincrona;
+    public RespostaAssincrona objDelegataRespostaAssincrona = null;
 
-    private ProgressDialog load;
-    private Context context;
-    public AsyncResponse delegate = null;
-
-    public WebserviceTask(Context context, AsyncResponse delegate) {
-        this.context = context;
-        this.delegate = delegate;
+    public WebserviceTask(Context objContexto, RespostaAssincrona objDelegataRespostaAssincrona) {
+        this.objContexto = objContexto;
+        this.objDelegataRespostaAssincrona = objDelegataRespostaAssincrona;
     }
 
     @Override
     protected void onPreExecute(){
         super.onPreExecute();
-        load = ProgressDialog.show(context, "Por favor Aguarde ...", "Obtendo dados ...");
+        objDialogoProcesso = ProgressDialog.show(objContexto, "Por favor Aguarde ...", "Obtendo dados ...");
     }
 
     @Override
-    protected String doInBackground(Object... params) {
+    protected JSONObject doInBackground(Object... params) {
         try {
-            url = new URL((String) params[0]);
-            data = (JSONObject) params[1];
-            con = (HttpURLConnection) url.openConnection();
+            objURL = new URL((String) params[0]);
+            objDadosEnvio = (JSONObject) params[1];
+            objConexao = (HttpURLConnection) objURL.openConnection();
 
-            con.setReadTimeout(10000);
-            con.setConnectTimeout(15000);
-            con.setDoOutput(true);
-            con.setDoInput(true);
-            con.setRequestMethod("POST");
-            con.addRequestProperty("Accept", "application/json");
-            con.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-            con.setRequestProperty("X-Requested-With", "XMLHttpRequest");
-            con.setFixedLengthStreamingMode(data.toString().getBytes().length);
+            objConexao.setReadTimeout(10000);
+            objConexao.setConnectTimeout(15000);
+            objConexao.setDoOutput(true);
+            objConexao.setDoInput(true);
+            objConexao.setRequestMethod("POST");
+            objConexao.addRequestProperty("Accept", "application/json");
+            objConexao.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+            objConexao.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+            objConexao.setFixedLengthStreamingMode(objDadosEnvio.toString().getBytes().length);
 
-            con.connect();
+            objConexao.connect();
 
-            os = new BufferedOutputStream(con.getOutputStream());
+            objFluxoSaida = new BufferedOutputStream(objConexao.getOutputStream());
 
-            os.write(data.toString().getBytes());
-            os.flush();
-            os.close();
+            objFluxoSaida.write(objDadosEnvio.toString().getBytes());
+            objFluxoSaida.flush();
+            objFluxoSaida.close();
 
-            in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            objLeitorBuffer = new BufferedReader(new InputStreamReader(objConexao.getInputStream()));
 
-            String inputLine;
+            String strLinhaEntrada;
 
-            StringBuffer response = new StringBuffer();
+            StringBuffer stbBuffer = new StringBuffer();
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine + "\n");
+            while ((strLinhaEntrada = objLeitorBuffer.readLine()) != null) {
+                stbBuffer.append(strLinhaEntrada + "\n");
             }
 
-            in.close();
+            objLeitorBuffer.close();
 
-            MainActivity.dataResult = new JSONObject(response.toString());
-            return MainActivity.dataResult.get("return").toString();
-            //return new JSONObject(response.toString()).get("status").toString();
-        } catch (Exception ex) {
-            Log.i("Webservice", "Erro " + ex.getMessage());
+            return new JSONObject(stbBuffer.toString());
+        } catch (Exception objException) {
+            objExcecaoAssincrona = objException;
         }
         finally {
-            con.disconnect();
+            objConexao.disconnect();
         }
 
         return null;
     }
 
     @Override
-    protected void onPostExecute(String result){
-        super.onPostExecute(result);
-        load.dismiss();
-        delegate.processFinish(this.context, result);
+    protected void onPostExecute(JSONObject objResponse){
+        super.onPostExecute(objResponse);
+        objDialogoProcesso.dismiss();
+
+        if(objExcecaoAssincrona != null)
+            objDelegataRespostaAssincrona.erroAssincrono(this.objContexto, objExcecaoAssincrona);
+        else
+            objDelegataRespostaAssincrona.fimProcessamento(this.objContexto, objResponse);
     }
 
-    public interface AsyncResponse {
-        void processFinish(Context context, String result);
+    public interface RespostaAssincrona {
+        void fimProcessamento(Context objContexto, JSONObject objDadosRetorno);
+        void erroAssincrono(Context objContexto, Exception objExcecaoAssincrona);
     }
 }
