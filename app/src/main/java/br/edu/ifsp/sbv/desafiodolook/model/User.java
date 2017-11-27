@@ -1,4 +1,4 @@
-package br.edu.ifsp.sbv.desafiodolook;
+package br.edu.ifsp.sbv.desafiodolook.model;
 
 import java.util.Date;
 

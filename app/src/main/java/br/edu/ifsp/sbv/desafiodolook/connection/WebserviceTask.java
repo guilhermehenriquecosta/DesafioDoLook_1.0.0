@@ -1,4 +1,4 @@
-package br.edu.ifsp.sbv.desafiodolook;
+package br.edu.ifsp.sbv.desafiodolook.connection;
 
 /**
  * Created by Adriel on 11/20/2017.

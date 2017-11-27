@@ -3,7 +3,6 @@ package br.edu.ifsp.sbv.desafiodolook;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONObject;
 import android.provider.Settings.Secure;
+
+import br.edu.ifsp.sbv.desafiodolook.model.User;
 
 /**
  * Created by Guilherme on 21/11/2017.
