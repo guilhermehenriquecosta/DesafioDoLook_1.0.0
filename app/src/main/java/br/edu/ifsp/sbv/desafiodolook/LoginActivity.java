@@ -54,7 +54,7 @@ public class LoginActivity extends Activity{
             @Override
             public void onClick(View v) {
                 JSONObject data = new JSONObject();
-//
+///
                 try
                 {
                     data.put("email_user", edtUser.getText().toString());
