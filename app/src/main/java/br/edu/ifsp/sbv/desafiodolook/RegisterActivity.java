@@ -3,6 +3,7 @@ package br.edu.ifsp.sbv.desafiodolook;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 import android.provider.Settings.Secure;
 
+import br.edu.ifsp.sbv.desafiodolook.connection.WebserviceTask;
 import br.edu.ifsp.sbv.desafiodolook.model.User;
 
 /**
@@ -64,41 +66,45 @@ public class RegisterActivity extends Activity {
                     data.put("password_user", edtPasswordConfirm.getText().toString());
                     data.put("id_device", Secure.getString(getContentResolver(), Secure.ANDROID_ID));
 
-                    /*new WebserviceTask(mContext, new WebserviceTask.AsyncResponse() {
+                    new WebserviceTask(mContext, new WebserviceTask.RespostaAssincrona() {
                         @Override
-                        public void processFinish(Context context, String result) {
-                            if(result != null) {
-                                Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+                        public void fimProcessamento(Context objContexto, JSONObject ObjDadosRetorno) {
+                            try
+                            {
+                                if(ObjDadosRetorno != null) {
+                                    //Toast.makeText(objContexto, ObjDadosRetorno.get("return").toString(), Toast.LENGTH_LONG).show();
+
+                                    if(ObjDadosRetorno.has("userInfo") && !ObjDadosRetorno.isNull("userInfo")) {
+
+                                        if(ObjDadosRetorno.get("return").equals("exist")){
+                                            if(ObjDadosRetorno.getJSONObject("userInfo").has("email"))
+                                                Toast.makeText(mContext, "Email já cadastrado!", Toast.LENGTH_LONG).show();
+                                            else
+                                                Toast.makeText(mContext, "Usuário já cadastrado!", Toast.LENGTH_LONG).show();
+                                        }else{
+                                            SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
+                                            SharedPreferences.Editor editor = preferences.edit();
+                                            editor.putBoolean("isLogged", true);
+                                            editor.putInt("userID", Integer.parseInt(ObjDadosRetorno.getJSONObject("userInfo").get("userInfoID").toString()));
+                                            editor.commit();
+                                            Intent intent = new Intent(mContext, MainActivity.class);
+                                            mContext.startActivity(intent);
+                                        }
+
+                                    }else
+                                        Toast.makeText(mContext, "Erro ao criar usúario!", Toast.LENGTH_LONG).show();
+                                }
+                            } catch (Exception ex) {
+                                Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
-                    }).execute("http://www.appointweb.com.br/desafioDoLookApp/controller/users/create_user.php", data);
 
-                    data = new JSONObject();
-
-                    data.put("email_user", edtUserRegister.getText().toString());
-                    data.put("password_user", edtPasswordConfirm.getText().toString());
-
-                    new WebserviceTask(mContext, new WebserviceTask.AsyncResponse() {
                         @Override
-                        public void processFinish(Context context, String result) {
-                            if(result != null) {
-                                Toast.makeText(context, result, Toast.LENGTH_LONG).show();
-                            }
+                        public void erroAssincrono(Context objContexto, Exception ex) {
+                            Toast.makeText(objContexto, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
                         }
-                    }).execute("http://www.appointweb.com.br/desafioDoLookApp/controller/users/get_user.php", data);
+                    }).execute("http://www.appointweb.com/desafioDoLookApp/controller/users/create_user.php", data);
 
-                    if (!dataResult.get("return").toString().equals("false")) {
-                        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putBoolean("isLogged", true);
-                        editor.putInt("userID",Integer.parseInt(dataResult.get("userID").toString()));
-                        editor.commit();
-                        Intent intent = new Intent(mContext, MainActivity.class);
-                        mContext.startActivity(intent);
-                    } else {
-                        Toast.makeText(mContext, "Usuário não encontrado", Toast.LENGTH_LONG).show();
-                    }
-                    dataResult = null;*/
                 } catch (Exception ex) {
                     Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
                 }

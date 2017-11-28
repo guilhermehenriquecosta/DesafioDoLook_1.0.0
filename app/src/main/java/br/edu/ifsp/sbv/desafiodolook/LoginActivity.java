@@ -54,7 +54,7 @@ public class LoginActivity extends Activity{
             @Override
             public void onClick(View v) {
                 JSONObject data = new JSONObject();
-/////
+
                 try
                 {
                     data.put("email_user", edtUser.getText().toString());
@@ -66,7 +66,7 @@ public class LoginActivity extends Activity{
                             try
                             {
                                 if(ObjDadosRetorno != null) {
-                                    Toast.makeText(objContexto, ObjDadosRetorno.get("return").toString(), Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(objContexto, ObjDadosRetorno.get("return").toString(), Toast.LENGTH_LONG).show();
 
                                     if(ObjDadosRetorno.has("userInfo") && !ObjDadosRetorno.isNull("userInfo")) {
 
@@ -77,20 +77,20 @@ public class LoginActivity extends Activity{
                                         editor.commit();
                                         Intent intent = new Intent(mContext, MainActivity.class);
                                         mContext.startActivity(intent);
-                                    }
+                                    }else
+                                        Toast.makeText(mContext, "User não encontrado", Toast.LENGTH_LONG).show();
                                 }
-                            } catch (Exception objExcecao) {
-                                Toast.makeText(mContext, "User não encontrado", Toast.LENGTH_LONG).show();
+                            } catch (Exception ex) {
+                                Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
 
                         @Override
-                        public void erroAssincrono(Context objContexto, Exception objExcecao) {
-                            Toast.makeText(objContexto, "Erro: " + objExcecao.getMessage(), Toast.LENGTH_LONG).show();
+                        public void erroAssincrono(Context objContexto, Exception ex) {
+                            Toast.makeText(objContexto, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
                         }
-                    }).execute("http://www.appointweb.com/Imagem/exuser.php", data);
-                    //http://www.appointweb.com/Imagem/exuser.php
-                    //http://www.appointweb.com.br/desafioDoLookApp/controller/users/get_user.php
+                    }).execute("http://www.appointweb.com/desafioDoLookApp/controller/users/get_user.php", data);
+
                 } catch(Exception ex) {
                     Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show();
                 }
