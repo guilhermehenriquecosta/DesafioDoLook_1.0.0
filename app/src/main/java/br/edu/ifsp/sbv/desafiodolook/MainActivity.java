@@ -18,12 +18,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import br.edu.ifsp.sbv.desafiodolook.adapter.DuelAdapter;
+import br.edu.ifsp.sbv.desafiodolook.model.Album;
+import br.edu.ifsp.sbv.desafiodolook.model.Duel;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,6 +49,8 @@ public class MainActivity extends AppCompatActivity
     public static JSONObject dataResult = new JSONObject();
 
     private Context mContext = MainActivity.this;
+    private GridView mGridView;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +65,67 @@ public class MainActivity extends AppCompatActivity
 
             Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
             TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+
+            mGridView = (GridView) findViewById(R.id.gridView);
+
+            String url="http://www.appointweb.com/desafioDoLookApp/controller/duel/get_duel.php";
+
+            requestQueue = Volley.newRequestQueue(this);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            List<Duel> listDuel = new ArrayList<>();
+
+                            try {
+                                JSONObject jsonDuels =
+                                        response.getJSONObject("duels");
+                                JSONArray jsonDuel =
+                                        jsonDuels.getJSONArray("duel");
+
+                                for (int i = 0; i < jsonDuel.length(); i++) {
+                                    JSONObject jsonCarroItem =
+                                            jsonDuel.getJSONObject(i);
+                                    Integer duelID  =
+                                            Integer.parseInt(jsonCarroItem.getString("duelID"));
+                                    Integer leftAlbumID  =
+                                            Integer.parseInt(jsonCarroItem.getString("leftAlbumID"));
+                                    Integer rightAlbumID  =
+                                            Integer.parseInt(jsonCarroItem.getString("rightAlbumID"));
+                                    String urlPicture1 =
+                                            jsonCarroItem.getString("urlPicture1");
+                                    String urlPicture2 =
+                                            jsonCarroItem.getString("urlPicture2");
+                                    Integer userInfoID1  =
+                                            Integer.parseInt(jsonCarroItem.getString("userInfoID1"));
+                                    Integer userInfoID2  =
+                                            Integer.parseInt(jsonCarroItem.getString("userInfoID2"));
+
+                                    Duel duel = new Duel(duelID, new Album(leftAlbumID, userInfoID1, urlPicture1),
+                                                                new Album(rightAlbumID, userInfoID2, urlPicture2));
+                                    listDuel.add(duel);
+                                }
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+                            //aa();
+                            //setListAdapter(new UserInfoAdapter(getApplicationContext(), listAlbum));
+                            //lvCabos.setAdapter(new AlbumAdapter(getApplicationContext(), listAlbum));
+                            mGridView.setAdapter(new DuelAdapter(getApplicationContext(),listDuel));
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getApplicationContext(), "Erro!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            //add request to queue
+            requestQueue.add(jsonObjectRequest);
+
             txtTitle.setText("Desafios");
             txtTitle.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/sweetsensations.ttf"));
 
