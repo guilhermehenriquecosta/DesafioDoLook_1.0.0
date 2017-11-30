@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/ico_cancel"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="45dp"
+            android:layout_marginBottom="45dp"
+            android:src="@drawable/ico_cancel" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/ico_confirm"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="45dp"
+            android:layout_marginBottom="45dp"
+            android:src="@drawable/ico_confirm" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <!--<ImageView-->
+        <!--android:layout_width="45dp"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:layout_marginStart="10dp"-->
+        <!--android:layout_marginEnd="20dp"-->
+        <!--android:id="@+id/ico_cancel"-->
+        <!--android:src="@drawable/ico_cancel" />-->
+
+    <!--<ImageView-->
+        <!--android:layout_width="45dp"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:layout_marginStart="10dp"-->
+        <!--android:layout_marginEnd="20dp"-->
+        <!--android:id="@+id/ico_confirm"-->
+        <!--android:src="@drawable/ico_confirm" />-->
+
+</RelativeLayout>

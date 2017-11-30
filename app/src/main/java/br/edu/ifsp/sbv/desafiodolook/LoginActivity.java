@@ -53,44 +53,44 @@ public class LoginActivity extends Activity{
         btnLogar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject data = new JSONObject();
-
                 try
                 {
-                    data.put("email_user", edtUser.getText().toString());
-                    data.put("password_user", edtPassword.getText().toString());
+                    if (validateFields(edtUser.getText().toString(),edtPassword.getText().toString())) {
+                        JSONObject data = new JSONObject();
+                        data.put("email_user", edtUser.getText().toString());
+                        data.put("password_user", edtPassword.getText().toString());
 
-                    new WebserviceTask(mContext, new WebserviceTask.RespostaAssincrona() {
-                        @Override
-                        public void fimProcessamento(Context objContexto, JSONObject ObjDadosRetorno) {
-                            try
-                            {
-                                if(ObjDadosRetorno != null) {
-                                    //Toast.makeText(objContexto, ObjDadosRetorno.get("return").toString(), Toast.LENGTH_LONG).show();
-
-                                    if(ObjDadosRetorno.has("userInfo") && !ObjDadosRetorno.isNull("userInfo")) {
-
-                                        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
-                                        SharedPreferences.Editor editor = preferences.edit();
-                                        editor.putBoolean("isLogged", true);
-                                        editor.putInt("userID", Integer.parseInt(ObjDadosRetorno.getJSONObject("userInfo").get("userInfoID").toString()));
-                                        editor.commit();
-                                        Intent intent = new Intent(mContext, MainActivity.class);
-                                        mContext.startActivity(intent);
-                                    }else
-                                        Toast.makeText(mContext, "User não encontrado", Toast.LENGTH_LONG).show();
+                        new WebserviceTask(mContext, new WebserviceTask.RespostaAssincrona() {
+                            @Override
+                            public void fimProcessamento(Context objContexto, JSONObject ObjDadosRetorno) {
+                                try
+                                {
+                                    if(ObjDadosRetorno != null) {
+                                        if(ObjDadosRetorno.has("userInfo") && !ObjDadosRetorno.isNull("userInfo")) {
+                                            SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
+                                            SharedPreferences.Editor editor = preferences.edit();
+                                            editor.putBoolean("isLogged", true);
+                                            editor.putInt("userID", Integer.parseInt(ObjDadosRetorno.getJSONObject("userInfo").get("userInfoID").toString()));
+                                            editor.commit();
+                                            Intent intent = new Intent(mContext, MainActivity.class);
+                                            mContext.startActivity(intent);
+                                        } else {
+                                            Toast.makeText(mContext, "Usuário e/ou senha inválidos!", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                } catch (Exception ex) {
+                                    Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
                                 }
-                            } catch (Exception ex) {
-                                Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
                             }
-                        }
 
-                        @Override
-                        public void erroAssincrono(Context objContexto, Exception ex) {
-                            Toast.makeText(objContexto, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }).execute("http://www.appointweb.com/desafioDoLookApp/controller/users/get_user.php", data);
-
+                            @Override
+                            public void erroAssincrono(Context objContexto, Exception ex) {
+                                Toast.makeText(objContexto, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }).execute("http://www.appointweb.com/desafioDoLookApp/controller/users/get_user.php", data);
+                    } else {
+                        Toast.makeText(mContext, "Informe seu username e sua senha para acessar.", Toast.LENGTH_LONG).show();
+                    }
                 } catch(Exception ex) {
                     Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -116,5 +116,12 @@ public class LoginActivity extends Activity{
     protected void onStop() {
         super.onStop();
         finish();
+    }
+
+    private boolean validateFields(String strUser, String strPassword) {
+        if (strUser.isEmpty() || strPassword.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }

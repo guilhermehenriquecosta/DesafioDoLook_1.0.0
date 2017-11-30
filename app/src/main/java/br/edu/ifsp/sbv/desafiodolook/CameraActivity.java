@@ -1,12 +1,20 @@
 package br.edu.ifsp.sbv.desafiodolook;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,9 +22,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import br.edu.ifsp.sbv.desafiodolook.R;
 import br.edu.ifsp.sbv.desafiodolook.FooterNavigationViewHelper;
@@ -30,6 +45,9 @@ public class CameraActivity extends AppCompatActivity
 
     private static final String TAG = "CameraActivity";
     private static final int ACTIVITY_NUM = 0;
+    private static final int PERMISSAO_REQUEST = 2;
+    private static final int CAMERA = 4;
+    private File arquivoFoto = null;
 
     private Context mContext = CameraActivity.this;
 
@@ -38,6 +56,13 @@ public class CameraActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: started.");
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSAO_REQUEST);
+            }
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
@@ -57,6 +82,31 @@ public class CameraActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         setupFooterNavigationView();
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            try {
+                arquivoFoto = criarArquivo();
+            } catch (IOException ex) {
+
+            }
+            if (arquivoFoto != null) {
+                Uri photoURI = FileProvider.getUriForFile(getBaseContext(), getBaseContext().getApplicationContext().getPackageName() + ".provider", arquivoFoto);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA && resultCode == RESULT_OK) {
+            sendBroadcast(new Intent(
+                    Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                    Uri.fromFile(arquivoFoto))
+            );
+        }
+        Toast.makeText(mContext, "Informe seu username e sua senha para acessar.", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -112,5 +162,27 @@ public class CameraActivity extends AppCompatActivity
         FooterNavigationViewHelper.setupFooterNavigationView(bottomNavigationViewEx);
         FooterNavigationViewHelper.enableNavigation(mContext,bottomNavigationViewEx);
     }
+
+    private File criarArquivo() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File pasta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File imagem = new File(pasta.getPath() + File.separator + "JPG_" + timeStamp + ".jpg");
+        return imagem;
+    }
+
+//    private void exibirImagem() {
+//        int targetW = imageView.getWidth();
+//        int targetH = imageView.getHeight();
+//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+//        bmOptions.inJustDecodeBounds = true;
+//        BitmapFactory.decodeFile(arquivoFoto.getAbsolutePath(), bmOptions);
+//        int photoW = bmOptions.outWidth;
+//        int photoH = bmOptions.outHeight;
+//        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+//        bmOptions.inJustDecodeBounds = false;
+//        bmOptions.inSampleSize = scaleFactor;
+//        bitmap = BitmapFactory.decodeFile(arquivoFoto.getAbsolutePath(), bmOptions);
+//        imageView.setImageBitmap(bitmap);
+//    }
 }
 
