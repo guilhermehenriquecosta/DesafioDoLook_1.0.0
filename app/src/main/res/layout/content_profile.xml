@@ -78,11 +78,11 @@
             android:layout_below="@+id/linLayout"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="50dp">
-            <GridView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-            </GridView>
+            <ListView
+                android:id="@+id/lvPhotos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </RelativeLayout>
 
     </RelativeLayout>

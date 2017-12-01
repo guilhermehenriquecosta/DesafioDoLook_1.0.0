@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity
 
     private Context mContext = MainActivity.this;
     private GridView mGridView;
-    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity
 
             String url="http://www.appointweb.com/desafioDoLookApp/controller/duel/get_duel.php";
 
-            requestQueue = Volley.newRequestQueue(this);
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                     new Response.Listener<JSONObject>() {
@@ -111,10 +110,15 @@ public class MainActivity extends AppCompatActivity
                                 e.printStackTrace();
                             }
 
-                            //aa();
-                            //setListAdapter(new UserInfoAdapter(getApplicationContext(), listAlbum));
-                            //lvCabos.setAdapter(new AlbumAdapter(getApplicationContext(), listAlbum));
                             mGridView.setAdapter(new DuelAdapter(getApplicationContext(),listDuel));
+
+                            mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                public void onItemClick(AdapterView<?> parent, View v,
+                                                        int position, long id) {
+                                    Toast.makeText(mContext, "pos:" + position,
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
                         }
                     },
@@ -148,14 +152,6 @@ public class MainActivity extends AppCompatActivity
             mContext.startActivity(intent);
             Log.d(TAG, "onCreate: starting in Home.");
         }
-
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(MainActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
