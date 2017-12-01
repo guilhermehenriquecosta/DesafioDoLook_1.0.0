@@ -13,7 +13,6 @@ import java.util.List;
 import br.edu.ifsp.sbv.desafiodolook.R;
 import br.edu.ifsp.sbv.desafiodolook.connection.VolleySingleton;
 import br.edu.ifsp.sbv.desafiodolook.model.Album;
-import br.edu.ifsp.sbv.desafiodolook.model.Duel;
 
 /**
  * Created by Adriel on 11/30/2017.
@@ -36,16 +35,6 @@ public class PhotoAdapter extends ArrayAdapter<Album> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-//        Album photo = listPhotos.get(position);
-//
-//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View view = inflater.inflate(R.layout.list_item_photo, null);
-//
-//        NetworkImageView netImageViewAlbum = (NetworkImageView) view.findViewById(R.id.netImgViewPhoto);
-//        netImageViewAlbum.setImageUrl(album.getUrlPicture(), VolleySingleton.getInstance(getContext()).getImageLoader());
-//
-//        return view;
-
         PhotoAdapter.ViewHolder viewHolder = new PhotoAdapter.ViewHolder();
         Album photo = listPhotos.get(position);
 

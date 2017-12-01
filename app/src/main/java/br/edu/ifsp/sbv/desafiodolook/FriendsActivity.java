@@ -15,12 +15,31 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.ifsp.sbv.desafiodolook.R;
 import br.edu.ifsp.sbv.desafiodolook.FooterNavigationViewHelper;
+import br.edu.ifsp.sbv.desafiodolook.adapter.FriendAdapter;
+import br.edu.ifsp.sbv.desafiodolook.adapter.PhotoAdapter;
+import br.edu.ifsp.sbv.desafiodolook.model.Album;
+import br.edu.ifsp.sbv.desafiodolook.model.Friend;
+import br.edu.ifsp.sbv.desafiodolook.model.User;
 
 /**
  * Created by Guilherme on 10/11/2017.
@@ -33,15 +52,67 @@ public class FriendsActivity extends AppCompatActivity
     private static final int ACTIVITY_NUM = 2;
 
     private Context mContext = FriendsActivity.this;
+    private ListView lvFriends;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_friend);
         Log.d(TAG, "onCreate: started.");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        lvFriends = (ListView) findViewById(R.id.lvFriends);
+
+        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
+        int userID = preferences.getInt("userID", 0);
+
+        //String url="http://www.appointweb.com/desafioDoLookApp/controller/album/get_album.php";
+        String url="http://appointweb.com/Imagem/testImagens.json";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        List<Friend> listFriends = new ArrayList<>();
+
+                        try {
+                            JSONObject jsonFriends =
+                                    response.getJSONObject("users");
+                            JSONArray jsonFriend =
+                                    jsonFriends.getJSONArray("userInfo");
+
+                            for (int i = 0; i < jsonFriend.length(); i++) {
+                                JSONObject jsonFriendItem =
+                                        jsonFriend.getJSONObject(i);
+                                Integer userInfoID  =
+                                        Integer.parseInt(jsonFriendItem.getString("userInfoID"));
+                                String thumbnail =
+                                        jsonFriendItem.getString("urlPicture");
+
+                                Friend friend = new Friend(userInfoID, new User(userInfoID), new User(userInfoID,"adriel_sccp@hotmail.com","Adriel",thumbnail));
+                                listFriends.add(friend);
+                            }
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        lvFriends.setAdapter(new FriendAdapter(getApplicationContext(), listFriends));
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Erro!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        //add request to queue
+        requestQueue.add(jsonObjectRequest);
+
+
         txtTitle.setText("Friends");
         txtTitle.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/sweetsensations.ttf"));
 

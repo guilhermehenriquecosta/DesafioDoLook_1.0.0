@@ -20,6 +20,19 @@ public class User {
     private Boolean status;
     private Date dateCreation;
 
+    public  User(){}
+
+    public  User(Integer userID){
+        this.userID = userID;
+    }
+
+    public User(Integer userID, String email, String userName, String urlAvatar){
+        this.userID = userID;
+        this.email = email;
+        this.userName = userName;
+        this.urlAvatar = urlAvatar;
+    }
+
     public Integer getUserID() {
         return userID;
     }
