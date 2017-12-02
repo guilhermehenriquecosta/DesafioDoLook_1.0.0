@@ -34,23 +34,26 @@
         </android.support.v4.view.ViewPager>
 
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/relLayoutMain"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="50dp">
+
         <GridView
             android:id="@+id/gridView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:numColumns="2"
-            android:verticalSpacing="1dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:gravity="center"
             android:horizontalSpacing="1dp"
+            android:numColumns="2"
             android:stretchMode="columnWidth"
-            android:gravity="center">
+            android:verticalSpacing="1dp"></GridView>
 
-        </GridView>
     </RelativeLayout>
 
 </merge>

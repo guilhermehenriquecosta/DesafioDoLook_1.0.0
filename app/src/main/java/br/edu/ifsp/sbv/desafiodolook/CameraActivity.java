@@ -1,11 +1,14 @@
 package br.edu.ifsp.sbv.desafiodolook;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +23,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,13 +32,22 @@ import android.widget.Toast;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import br.edu.ifsp.sbv.desafiodolook.R;
 import br.edu.ifsp.sbv.desafiodolook.FooterNavigationViewHelper;
+import br.edu.ifsp.sbv.desafiodolook.connection.WebserviceTask;
+
+import static android.R.attr.data;
 
 /**
  * Created by Guilherme on 10/11/2017.
@@ -105,6 +118,7 @@ public class CameraActivity extends AppCompatActivity
                     Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                     Uri.fromFile(arquivoFoto))
             );
+            ajustaFoto(arquivoFoto);
         }
         Toast.makeText(mContext, "Informe seu username e sua senha para acessar.", Toast.LENGTH_LONG).show();
     }
@@ -170,19 +184,97 @@ public class CameraActivity extends AppCompatActivity
         return imagem;
     }
 
-//    private void exibirImagem() {
-//        int targetW = imageView.getWidth();
-//        int targetH = imageView.getHeight();
-//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-//        bmOptions.inJustDecodeBounds = true;
-//        BitmapFactory.decodeFile(arquivoFoto.getAbsolutePath(), bmOptions);
-//        int photoW = bmOptions.outWidth;
-//        int photoH = bmOptions.outHeight;
-//        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-//        bmOptions.inJustDecodeBounds = false;
-//        bmOptions.inSampleSize = scaleFactor;
-//        bitmap = BitmapFactory.decodeFile(arquivoFoto.getAbsolutePath(), bmOptions);
-//        imageView.setImageBitmap(bitmap);
-//    }
+    protected void ajustaFoto( File arquivo ){
+        getContentResolver().notifyChange( Uri.fromFile( arquivo ) , null);
+        ContentResolver cr = getContentResolver();
+        JSONObject data = new JSONObject();
+        Bitmap bitmap = null;
+        int w = 0;
+        int h = 0;
+
+        // redimensiona a imagem
+        Integer lateral = 256; // tamanho final da dimensao maior da imagem
+        try {
+            // joga a imagem em uma variavel
+            bitmap = android.provider.MediaStore.Images.Media.getBitmap( cr, Uri.fromFile( arquivo ) );
+
+            //BitmapDrawable bmpd = new BitmapDrawable(bitmap);
+
+            // cria um stream pra salvar o arquivo
+            FileOutputStream out = new FileOutputStream( arquivo.getPath() );
+            ByteArrayOutputStream byteArrayOutputStreamObject  = new ByteArrayOutputStream();
+
+            // uma nova instancia do bitmap rotacionado
+            //Bitmap bmp = bmpd.getBitmap();
+            Bitmap bmp = bitmap;
+
+                    //define um indice = 1 pois se der erro vai manter a imagem como esta.
+            Integer idx = 1;
+
+            // reupera as dimensoes da imagem
+            w = bmp.getWidth();
+            h = bmp.getHeight();
+
+            // verifica qual a maior dimensao e divide pela lateral final para definir qual o indice de reducao
+            if ( w >= h){
+                idx = w / lateral;
+            } else {
+                idx = h / lateral;
+            }
+
+            // acplica o indice de reducao nas novas dimensoes
+            w = w / idx;
+            h = h / idx;
+
+            // cria nova instancia da imagem ja redimensionada
+            Bitmap bmpReduzido = Bitmap.createScaledBitmap(bmp, w, h, true);
+
+            // salva a imagem reduzida no disco
+            bmpReduzido.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStreamObject);
+
+            byte[] byteArrayVar = byteArrayOutputStreamObject.toByteArray();
+
+            final String ConvertImage = Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
+
+            data.put("encoded_string", ConvertImage);
+            data.put("userInfoID", 1);
+
+            new WebserviceTask(mContext, new WebserviceTask.RespostaAssincrona() {
+                @Override
+                public void fimProcessamento(Context objContexto, JSONObject ObjDadosRetorno) {
+                    try
+                    {
+                        if(ObjDadosRetorno != null) {
+                            //Toast.makeText(objContexto, ObjDadosRetorno.get("return").toString(), Toast.LENGTH_LONG).show();
+
+                            if(ObjDadosRetorno.has("status") && !ObjDadosRetorno.isNull("status")) {
+
+                                if(ObjDadosRetorno.get("status").equals("true")){
+                                    Toast.makeText(mContext, "SUCESSO!", Toast.LENGTH_LONG).show();
+                                }else{
+                                    Toast.makeText(mContext, "ERRO!", Toast.LENGTH_LONG).show();
+                                }
+
+                            }else
+                                Toast.makeText(mContext, "Erro ao criar usúario!", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception ex) {
+                        Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void erroAssincrono(Context objContexto, Exception ex) {
+                    Toast.makeText(objContexto, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }).execute("http://www.appointweb.com/desafioDoLookApp/controller/album/create_album.php", data);
+        } catch (FileNotFoundException e) {
+            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
