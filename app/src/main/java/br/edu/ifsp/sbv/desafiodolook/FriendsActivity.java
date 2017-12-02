@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +55,7 @@ public class FriendsActivity extends AppCompatActivity
 
     private Context mContext = FriendsActivity.this;
     private ListView lvFriends;
+    private GridView mGridView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +66,8 @@ public class FriendsActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         lvFriends = (ListView) findViewById(R.id.lvFriends);
+        mGridView = (GridView) findViewById(R.id.gridView);
+        mGridView.setVisibility(View.INVISIBLE);
 
         SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
         int userID = preferences.getInt("userID", 0);

@@ -1,13 +1,18 @@
 package br.edu.ifsp.sbv.desafiodolook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +35,7 @@ import java.util.List;
 import br.edu.ifsp.sbv.desafiodolook.adapter.PhotoAdapter;
 import br.edu.ifsp.sbv.desafiodolook.connection.VolleySingleton;
 import br.edu.ifsp.sbv.desafiodolook.model.Album;
+import br.edu.ifsp.sbv.desafiodolook.model.Duel;
 
 /**
  * Created by Adriel on 12/1/2017.
@@ -53,62 +59,48 @@ public class DuelActivity extends AppCompatActivity {
         TextView txtTitle = (TextView)toolbar.findViewById(R.id.toolbar_title_back);
         NetworkImageView netImgViewLeft = (NetworkImageView) findViewById(R.id.netImgViewDuelLeft);
         NetworkImageView netImgViewRight = (NetworkImageView) findViewById(R.id.netImgViewDuelRight);
+        FloatingActionButton btnVoteLeft = (FloatingActionButton) findViewById(R.id.ico_confirmLeft);
+        FloatingActionButton btnVoteTie = (FloatingActionButton) findViewById(R.id.ico_confirmTie);
+        FloatingActionButton btnVoteRight = (FloatingActionButton) findViewById(R.id.ico_confirmRight);
 
-        Bundle extras = getIntent().getExtras();
+        /*Bundle extras = getIntent().getExtras();
         if(extras != null && extras.containsKey("photoDuelLeft") && extras.containsKey("photoDuelRight")) {
             netImgViewLeft.setImageUrl(extras.getSerializable("photoDuelLeft").toString() , VolleySingleton.getInstance(mContext).getImageLoader());
             netImgViewRight.setImageUrl(extras.getSerializable("photoDuelRight").toString() , VolleySingleton.getInstance(mContext).getImageLoader());
         }else
+            Toast.makeText(mContext, "Erro!", Toast.LENGTH_SHORT).show();*/
+
+        Intent intent = getIntent();
+        final Duel duelSelect = (Duel) intent.getSerializableExtra("duelSelect");
+
+        if (duelSelect != null){
+            netImgViewLeft.setImageUrl(duelSelect.getAlbumLeft().getUrlPicture() , VolleySingleton.getInstance(mContext).getImageLoader());
+            netImgViewRight.setImageUrl(duelSelect.getAlbumRight().getUrlPicture() , VolleySingleton.getInstance(mContext).getImageLoader());
+        }else
             Toast.makeText(mContext, "Erro!", Toast.LENGTH_SHORT).show();
 
+        btnVoteLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext, "ID: " + duelSelect.getDuelID() + "v: 0",Toast.LENGTH_SHORT ).show();
+            }
+        });
 
-//        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
-//        int userID = preferences.getInt("userID", 0);
-//
-//        //String url="http://www.appointweb.com/desafioDoLookApp/controller/album/get_album.php";
-//        String url="http://appointweb.com/Imagem/testImagens.json";
-//
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        List<Album> listPhotos = new ArrayList<>();
-//
-//                        try {
-//                            JSONObject jsonPhotos =
-//                                    response.getJSONObject("users");
-//                            JSONArray jsonPhoto =
-//                                    jsonPhotos.getJSONArray("userInfo");
-//
-//                            for (int i = 0; i < jsonPhoto.length(); i++) {
-//                                JSONObject jsonPhotoItem =
-//                                        jsonPhoto.getJSONObject(i);
-//                                Integer userInfoID  =
-//                                        Integer.parseInt(jsonPhotoItem.getString("userInfoID"));
-//                                String thumbnail =
-//                                        jsonPhotoItem.getString("urlPicture");
-//
-//                                Album photo = new Album(userInfoID,userInfoID, thumbnail);
-//                                listPhotos.add(photo);
-//                            }
-//                        } catch (Exception e){
-//                            e.printStackTrace();
-//                        }
-//
-//                        lvPhotos.setAdapter(new PhotoAdapter(getApplicationContext(), listPhotos));
-//
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(getApplicationContext(), "Erro!", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//        //add request to queue
-//        requestQueue.add(jsonObjectRequest);
+        btnVoteTie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext, "ID: " + duelSelect.getDuelID() + "v: 2",Toast.LENGTH_SHORT ).show();
+            }
+        });
+
+        btnVoteRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext, "ID: " + duelSelect.getDuelID() + "v: 1",Toast.LENGTH_SHORT ).show();
+            }
+        });
+
+
 
         txtTitle.setText("Duel");
         txtTitle.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/sweetsensations.ttf"));

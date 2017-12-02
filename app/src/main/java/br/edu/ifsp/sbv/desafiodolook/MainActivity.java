@@ -122,12 +122,16 @@ public class MainActivity extends AppCompatActivity
 //                                            Toast.LENGTH_SHORT).show();
 
                                     Intent intent = new Intent(mContext, DuelActivity.class);
-                                    Bundle parameters = new Bundle();
+                                    /*Bundle parameters = new Bundle();
 
                                     parameters.putString("photoDuelLeft",listDuel.get(position).getAlbumLeft().getUrlPicture());
                                     parameters.putString("photoDuelRight",listDuel.get(position).getAlbumRight().getUrlPicture());
 
-                                    intent.putExtras(parameters);
+                                    intent.putExtras(parameters);*/
+
+                                    Duel duelSelect = listDuel.get(position);
+                                    intent.putExtra("duelSelect", duelSelect);
+
                                     mContext.startActivity(intent);
                                     Log.d(TAG, "onCreate: starting in Duel.");
                                 }

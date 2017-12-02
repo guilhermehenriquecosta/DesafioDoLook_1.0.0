@@ -21,6 +21,34 @@
         android:layout_below="@+id/relLayoutDuel"
         android:id="@+id/relLayoutProfile2">
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/ico_confirmLeft"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="45dp"
+            android:layout_marginBottom="45dp"
+            android:src="@drawable/ico_confirm" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/ico_confirmTie"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="170dp"
+            android:layout_marginBottom="45dp"
+            android:src="@drawable/ico_cancel" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/ico_confirmRight"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="45dp"
+            android:layout_marginBottom="45dp"
+            android:src="@drawable/ico_confirm" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -35,13 +63,13 @@
 
                 <com.android.volley.toolbox.NetworkImageView
                     android:id="@+id/netImgViewDuelLeft"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <com.android.volley.toolbox.NetworkImageView
                     android:id="@+id/netImgViewDuelRight"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 

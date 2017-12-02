@@ -1,10 +1,12 @@
 package br.edu.ifsp.sbv.desafiodolook.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Adriel on 11/29/2017.
  */
 
-public class Album {
+public class Album implements Serializable {
 
     private Integer albumID;
     private Integer userID;
