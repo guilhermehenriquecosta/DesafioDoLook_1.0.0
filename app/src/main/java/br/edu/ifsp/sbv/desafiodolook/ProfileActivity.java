@@ -57,7 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Log.d(TAG, "onCreate: starting in About.");
+        Log.d(TAG, "onCreate: starting in Profile.");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbarBack);
         ImageView icoBack = (ImageView)toolbar.findViewById(R.id.ico_bar_back);

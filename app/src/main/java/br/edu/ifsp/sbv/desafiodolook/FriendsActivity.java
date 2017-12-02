@@ -57,8 +57,8 @@ public class FriendsActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friend);
-        Log.d(TAG, "onCreate: started.");
+        setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate: starting in Friends.");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);

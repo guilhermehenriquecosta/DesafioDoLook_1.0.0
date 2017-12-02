@@ -36,6 +36,7 @@
             android:id="@+id/relLayout2">
 
             <include layout="@layout/content_main"/>
+            <include layout="@layout/content_friend"/>
 
         </RelativeLayout>
 

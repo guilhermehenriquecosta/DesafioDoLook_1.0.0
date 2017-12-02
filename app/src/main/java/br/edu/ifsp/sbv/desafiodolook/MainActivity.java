@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity
 
     private Context mContext = MainActivity.this;
     private GridView mGridView;
+    private ListView lvFriends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +67,9 @@ public class MainActivity extends AppCompatActivity
 
             Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
             TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-
             mGridView = (GridView) findViewById(R.id.gridView);
+            lvFriends = (ListView) findViewById(R.id.lvFriends);
+            lvFriends.setVisibility(View.INVISIBLE);
 
             String url="http://www.appointweb.com/desafioDoLookApp/controller/duel/get_duel.php";
 
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            List<Duel> listDuel = new ArrayList<>();
+                            final List<Duel> listDuel = new ArrayList<>();
 
                             try {
                                 JSONObject jsonDuels =
@@ -115,8 +118,18 @@ public class MainActivity extends AppCompatActivity
                             mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 public void onItemClick(AdapterView<?> parent, View v,
                                                         int position, long id) {
-                                    Toast.makeText(mContext, "pos:" + position,
-                                            Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(mContext, "pos:" + position,
+//                                            Toast.LENGTH_SHORT).show();
+
+                                    Intent intent = new Intent(mContext, DuelActivity.class);
+                                    Bundle parameters = new Bundle();
+
+                                    parameters.putString("photoDuelLeft",listDuel.get(position).getAlbumLeft().getUrlPicture());
+                                    parameters.putString("photoDuelRight",listDuel.get(position).getAlbumRight().getUrlPicture());
+
+                                    intent.putExtras(parameters);
+                                    mContext.startActivity(intent);
+                                    Log.d(TAG, "onCreate: starting in Duel.");
                                 }
                             });
 
