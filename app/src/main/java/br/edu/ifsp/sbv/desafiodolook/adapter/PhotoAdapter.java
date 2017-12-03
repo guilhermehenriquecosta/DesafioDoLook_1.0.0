@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -25,6 +26,7 @@ public class PhotoAdapter extends ArrayAdapter<Album> {
 
     static class ViewHolder{
         private NetworkImageView netImageViewPhoto;
+        private TextView txtViewDate;
     }
 
     public PhotoAdapter(Context context, List<Album> listPhotos) {
@@ -43,12 +45,14 @@ public class PhotoAdapter extends ArrayAdapter<Album> {
             convertView = inflater.inflate(R.layout.list_item_photo, parent, false);
 
             viewHolder.netImageViewPhoto = (NetworkImageView) convertView.findViewById(R.id.netImgViewPhoto);
+            viewHolder.txtViewDate = (TextView) convertView.findViewById(R.id.txtViewDate);
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (PhotoAdapter.ViewHolder) convertView.getTag();
         }
 
         viewHolder.netImageViewPhoto.setImageUrl(photo.getUrlPicture() , VolleySingleton.getInstance(context).getImageLoader());
+        viewHolder.txtViewDate.setText(photo.getDateCreation().toString());
 
         return convertView;
     }

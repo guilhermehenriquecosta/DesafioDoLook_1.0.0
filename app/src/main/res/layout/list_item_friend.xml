@@ -11,8 +11,15 @@
         android:layout_marginTop="10dp"
         android:id="@+id/linLayout">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profileImg"
+        <!--<de.hdodenhof.circleimageview.CircleImageView-->
+            <!--android:id="@+id/profileImg"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:src="@drawable/user_photo" />-->
+
+        <com.android.volley.toolbox.CircularNetworkImageView
+            android:id="@+id/netImgViewFriend"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"

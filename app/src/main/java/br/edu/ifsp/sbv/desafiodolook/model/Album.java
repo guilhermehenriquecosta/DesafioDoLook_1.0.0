@@ -1,6 +1,7 @@
 package br.edu.ifsp.sbv.desafiodolook.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Adriel on 11/29/2017.
@@ -11,6 +12,7 @@ public class Album implements Serializable {
     private Integer albumID;
     private Integer userID;
     private String urlPicture;
+    private Date dateCreation;
 
     public Album(){}
 
@@ -18,6 +20,13 @@ public class Album implements Serializable {
         this.albumID = albumID;
         this.userID = userID;
         this.urlPicture = urlPicture;
+    }
+
+    public Album(Integer albumID, Integer userID, String urlPicture, Date dateCreation){
+        this.albumID = albumID;
+        this.userID = userID;
+        this.urlPicture = urlPicture;
+        this.dateCreation = dateCreation;
     }
 
     public Integer getAlbumID() {
@@ -44,4 +53,11 @@ public class Album implements Serializable {
         this.urlPicture = urlPicture;
     }
 
+    public Date getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
+    }
 }

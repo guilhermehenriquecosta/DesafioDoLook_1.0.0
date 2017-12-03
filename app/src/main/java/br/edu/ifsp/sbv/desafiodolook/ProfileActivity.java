@@ -33,7 +33,10 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.edu.ifsp.sbv.desafiodolook.adapter.DuelAdapter;
@@ -67,15 +70,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final Friend userSelect = (Friend) intent.getSerializableExtra("userSelect");
+        final int userID;
 
         if (userSelect != null) {
-            int userID = userSelect.getFriendID();
+            userID = userSelect.getFriendID();
         } else {
             SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
-            int userID = preferences.getInt("userID", 0);
+            userID = preferences.getInt("userID", 0);
         }
 
-        String url="http://appointweb.com/Imagem/testImagens.json";
+        String url="http://www.appointweb.com/desafioDoLookApp/controller/album/get_album.php?userID=" + userID;
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -86,15 +90,17 @@ public class ProfileActivity extends AppCompatActivity {
                         List<Album> listPhotos = new ArrayList<>();
 
                         try {
-                            JSONObject jsonPhotos = response.getJSONObject("users");
-                            JSONArray jsonPhoto = jsonPhotos.getJSONArray("userInfo");
+                            JSONObject jsonPhoto = response.getJSONObject("photo");
+                            JSONArray jsonPhotos = jsonPhoto.getJSONArray("photos");
 
-                            for (int i = 0; i < jsonPhoto.length(); i++) {
-                                JSONObject jsonPhotoItem = jsonPhoto.getJSONObject(i);
-                                Integer userInfoID = Integer.parseInt(jsonPhotoItem.getString("userInfoID"));
-                                String thumbnail = jsonPhotoItem.getString("urlPicture");
-
-                                Album photo = new Album(userInfoID,userInfoID, thumbnail);
+                            for (int i = 0; i < jsonPhotos.length(); i++) {
+                                JSONObject jsonPhotoItem = jsonPhotos.getJSONObject(i);
+                                int albumID = Integer.parseInt(jsonPhotoItem.getString("albumID"));
+                                String urlPicture = jsonPhotoItem.getString("urlPicture");
+                                String dateCreationStr = jsonPhotoItem.getString("dateCreation");
+                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                Date dataCreation = format.parse(dateCreationStr);
+                                Album photo = new Album(albumID,userID, urlPicture,dataCreation);
                                 listPhotos.add(photo);
                             }
                         } catch (Exception e){

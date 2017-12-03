@@ -72,9 +72,9 @@ public class FriendsActivity extends AppCompatActivity
         mGridView.setVisibility(View.INVISIBLE);
 
         SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
-        int userID = preferences.getInt("userID", 0);
+        final int userID = preferences.getInt("userID", 0);
 
-        String url="http://appointweb.com/Imagem/testImagens.json";
+        String url="http://www.appointweb.com/desafioDoLookApp/controller/friend/get_friend.php?userID=" + userID;
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -85,16 +85,17 @@ public class FriendsActivity extends AppCompatActivity
                         final List<Friend> listFriends = new ArrayList<>();
 
                         try {
-                            JSONObject jsonFriends = response.getJSONObject("users");
-                            JSONArray jsonFriend = jsonFriends.getJSONArray("userInfo");
+                            JSONObject jsonFriend = response.getJSONObject("friend");
+                            JSONArray jsonFriends = jsonFriend.getJSONArray("friends");
 
-                            for (int i = 0; i < jsonFriend.length(); i++) {
-                                JSONObject jsonFriendItem = jsonFriend.getJSONObject(i);
-                                Integer userInfoID  = Integer.parseInt(jsonFriendItem.getString("userInfoID"));
-                                String thumbnail = jsonFriendItem.getString("urlPicture");
-                                Friend friend = new Friend(userInfoID, new User(userInfoID), new User(userInfoID,"adriel_sccp@hotmail.com","Adriel",thumbnail));
-                                listFriends.add(friend);
-                                listFriends.add(friend);
+                            for (int i = 0; i < jsonFriends.length(); i++) {
+                                JSONObject jsonFriendItem = jsonFriends.getJSONObject(i);
+                                int friendID  = Integer.parseInt(jsonFriendItem.getString("friendID"));
+                                int rightUserInfoID  = Integer.parseInt(jsonFriendItem.getString("rightUserInfoID"));
+                                String userName = jsonFriendItem.getString("userName");
+                                String email = jsonFriendItem.getString("email");
+                                String urlAvatar = jsonFriendItem.getString("urlAvatar");
+                                Friend friend = new Friend(friendID, new User(userID), new User(rightUserInfoID, email, userName, urlAvatar));
                                 listFriends.add(friend);
                             }
                         } catch (Exception e){
