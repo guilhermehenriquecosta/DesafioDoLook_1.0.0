@@ -117,7 +117,8 @@ public class CameraActivity extends AppCompatActivity
                     Uri.fromFile(arquivoFoto))
             );
             ajustaFoto(arquivoFoto);
-        } else if (requestCode == CAMERA && resultCode == 0) {
+        }
+        if (requestCode == CAMERA) {
             finish();
         }
     }
