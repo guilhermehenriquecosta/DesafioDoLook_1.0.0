@@ -23,18 +23,31 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
             android:id="@+id/relLayoutBack2">
 
-            <TextView
-                android:id="@+id/txtAbout"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="TextView"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_marginTop="70dp"
-                android:layout_marginBottom="50dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"/>
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical">
+                <TextView
+                    android:id="@+id/txtAbout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:lineSpacingExtra="7dp"
+                    android:text="O Desafio do Look é um aplicativo voltado para diversão e interação social entre os usuários, que irá trabalhar com fotos, votações e disputas por pontos.
+As fotos irão registrar os “looks” de moda do usuário.
+Irá possuir um mecanismo que irá gerar aleatoriamente duelos entre as fotos postadas de usuários e disponibilizar esses confrontos para votação semanal para todos os usuários.
+Esse aplicativo foi desenvolvido durante as disciplinas de Introdução ao Desenvolvimento para Dispositivos Móveis e Interação Humano-Computador para Dispositivos Móveis do curso de pós-graduação de Especialização em Desenvolvimento de Aplicações para Dispositivos Móveis do IFSP São João da Boa Vista pelos alunos Adriel Paiva e Guilherme Costa."
+                    android:textAlignment="inherit"
+                    android:textSize="16sp" />
+            </ScrollView>
 
         </RelativeLayout>
 

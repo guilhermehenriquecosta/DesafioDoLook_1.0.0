@@ -57,7 +57,6 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Log.d(TAG, "onCreate: starting in Profile.");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbarBack);
         ImageView icoBack = (ImageView)toolbar.findViewById(R.id.ico_bar_back);
@@ -67,7 +66,6 @@ public class ProfileActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
         int userID = preferences.getInt("userID", 0);
 
-        //String url="http://www.appointweb.com/desafioDoLookApp/controller/album/get_album.php";
         String url="http://appointweb.com/Imagem/testImagens.json";
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -79,18 +77,13 @@ public class ProfileActivity extends AppCompatActivity {
                         List<Album> listPhotos = new ArrayList<>();
 
                         try {
-                            JSONObject jsonPhotos =
-                                    response.getJSONObject("users");
-                            JSONArray jsonPhoto =
-                                    jsonPhotos.getJSONArray("userInfo");
+                            JSONObject jsonPhotos = response.getJSONObject("users");
+                            JSONArray jsonPhoto = jsonPhotos.getJSONArray("userInfo");
 
                             for (int i = 0; i < jsonPhoto.length(); i++) {
-                                JSONObject jsonPhotoItem =
-                                        jsonPhoto.getJSONObject(i);
-                                Integer userInfoID  =
-                                        Integer.parseInt(jsonPhotoItem.getString("userInfoID"));
-                                String thumbnail =
-                                        jsonPhotoItem.getString("urlPicture");
+                                JSONObject jsonPhotoItem = jsonPhoto.getJSONObject(i);
+                                Integer userInfoID = Integer.parseInt(jsonPhotoItem.getString("userInfoID"));
+                                String thumbnail = jsonPhotoItem.getString("urlPicture");
 
                                 Album photo = new Album(userInfoID,userInfoID, thumbnail);
                                 listPhotos.add(photo);
@@ -106,13 +99,12 @@ public class ProfileActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Erro!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.strError + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-        //add request to queue
         requestQueue.add(jsonObjectRequest);
 
-        txtTitle.setText("Profile");
+        txtTitle.setText(R.string.strProfile);
         txtTitle.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/sweetsensations.ttf"));
 
         setSupportActionBar(toolbar);

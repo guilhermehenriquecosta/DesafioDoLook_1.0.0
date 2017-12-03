@@ -4,25 +4,25 @@
     <item
         android:id="@+id/ico_camera"
         android:icon="@drawable/ico_camera"
-        android:title="Camera">
+        android:title="@string/strCamera">
     </item>
 
     <item
         android:id="@+id/ico_challenge"
         android:icon="@drawable/ico_challenge"
-        android:title="Challenge">
+        android:title="@string/strChallenge">
     </item>
 
     <item
         android:id="@+id/ico_friends"
         android:icon="@drawable/ico_friends"
-        android:title="Friends">
+        android:title="@string/strFriends">
     </item>
 
     <item
         android:id="@+id/ico_ranking"
         android:icon="@drawable/ico_ranking"
-        android:title="Ranking">
+        android:title="@string/strRanking">
     </item>
 
 </menu>

@@ -34,22 +34,18 @@ public class LoginActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.d(TAG, "onCreate: starting in Login.");
 
-        //Set fonts of texts
         ImageView imgLogo = (ImageView)findViewById(R.id.imgLogoLogin);
         Button btnLogar = (Button)findViewById(R.id.btnLogar);
         TextView txtLinkBackLogin = (TextView) findViewById(R.id.txtLinkBackLogin);
         final EditText edtUser = (EditText) findViewById(R.id.edtUser);
         final EditText edtPassword = (EditText) findViewById(R.id.edtPassword);
 
-        //Set fonts of texts
         txtLinkBackLogin.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/gravitybold.otf"));
         btnLogar.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/robotoblack.ttf"));
         edtUser.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/robotolight.ttf"));
         edtPassword.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/robotolight.ttf"));
 
-        //Set Listeners of elements
         btnLogar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,21 +71,21 @@ public class LoginActivity extends Activity{
                                             Intent intent = new Intent(mContext, MainActivity.class);
                                             mContext.startActivity(intent);
                                         } else {
-                                            Toast.makeText(mContext, "Usuário e/ou senha inválidos!", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(mContext, R.string.strUserPasswordWrong, Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 } catch (Exception ex) {
-                                    Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(mContext, R.string.strError + ex.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             }
 
                             @Override
                             public void erroAssincrono(Context objContexto, Exception ex) {
-                                Toast.makeText(objContexto, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(objContexto, R.string.strError + ex.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }).execute("http://www.appointweb.com/desafioDoLookApp/controller/users/get_user.php", data);
                     } else {
-                        Toast.makeText(mContext, "Informe seu username e sua senha para acessar.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, R.string.strUserPasswordNull, Toast.LENGTH_LONG).show();
                     }
                 } catch(Exception ex) {
                     Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show();

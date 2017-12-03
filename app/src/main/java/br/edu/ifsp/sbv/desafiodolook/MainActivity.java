@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity
 
         if (isLogged) {
             setContentView(R.layout.activity_main);
-            Log.d(TAG,"onCreate: starting in Main.");
 
             Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
             TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
@@ -82,31 +81,24 @@ public class MainActivity extends AppCompatActivity
                             final List<Duel> listDuel = new ArrayList<>();
 
                             try {
-                                JSONObject jsonDuels =
-                                        response.getJSONObject("duels");
-                                JSONArray jsonDuel =
-                                        jsonDuels.getJSONArray("duel");
+                                JSONObject jsonDuels = response.getJSONObject("duels");
+                                JSONArray jsonDuel = jsonDuels.getJSONArray("duel");
 
                                 for (int i = 0; i < jsonDuel.length(); i++) {
-                                    JSONObject jsonCarroItem =
-                                            jsonDuel.getJSONObject(i);
-                                    Integer duelID  =
-                                            Integer.parseInt(jsonCarroItem.getString("duelID"));
-                                    Integer leftAlbumID  =
-                                            Integer.parseInt(jsonCarroItem.getString("leftAlbumID"));
-                                    Integer rightAlbumID  =
-                                            Integer.parseInt(jsonCarroItem.getString("rightAlbumID"));
-                                    String urlPicture1 =
-                                            jsonCarroItem.getString("urlPicture1");
-                                    String urlPicture2 =
-                                            jsonCarroItem.getString("urlPicture2");
-                                    Integer userInfoID1  =
-                                            Integer.parseInt(jsonCarroItem.getString("userInfoID1"));
-                                    Integer userInfoID2  =
-                                            Integer.parseInt(jsonCarroItem.getString("userInfoID2"));
+                                    JSONObject jsonCarroItem = jsonDuel.getJSONObject(i);
+                                    Integer duelID = Integer.parseInt(jsonCarroItem.getString("duelID"));
+                                    Integer leftAlbumID = Integer.parseInt(jsonCarroItem.getString("leftAlbumID"));
+                                    Integer rightAlbumID = Integer.parseInt(jsonCarroItem.getString("rightAlbumID"));
+                                    String urlPicture1 = jsonCarroItem.getString("urlPicture1");
+                                    String urlPicture2 = jsonCarroItem.getString("urlPicture2");
+                                    Integer userInfoID1 = Integer.parseInt(jsonCarroItem.getString("userInfoID1"));
+                                    Integer userInfoID2 = Integer.parseInt(jsonCarroItem.getString("userInfoID2"));
 
-                                    Duel duel = new Duel(duelID, new Album(leftAlbumID, userInfoID1, urlPicture1),
-                                                                new Album(rightAlbumID, userInfoID2, urlPicture2));
+                                    Duel duel = new Duel(duelID, new Album(leftAlbumID, userInfoID1, urlPicture1), new Album(rightAlbumID, userInfoID2, urlPicture2));
+                                    listDuel.add(duel);
+                                    listDuel.add(duel);
+                                    listDuel.add(duel);
+                                    listDuel.add(duel);
                                     listDuel.add(duel);
                                 }
                             } catch (Exception e){
@@ -118,22 +110,10 @@ public class MainActivity extends AppCompatActivity
                             mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 public void onItemClick(AdapterView<?> parent, View v,
                                                         int position, long id) {
-//                                    Toast.makeText(mContext, "pos:" + position,
-//                                            Toast.LENGTH_SHORT).show();
-
                                     Intent intent = new Intent(mContext, DuelActivity.class);
-                                    /*Bundle parameters = new Bundle();
-
-                                    parameters.putString("photoDuelLeft",listDuel.get(position).getAlbumLeft().getUrlPicture());
-                                    parameters.putString("photoDuelRight",listDuel.get(position).getAlbumRight().getUrlPicture());
-
-                                    intent.putExtras(parameters);*/
-
                                     Duel duelSelect = listDuel.get(position);
                                     intent.putExtra("duelSelect", duelSelect);
-
                                     mContext.startActivity(intent);
-                                    Log.d(TAG, "onCreate: starting in Duel.");
                                 }
                             });
 
@@ -142,21 +122,19 @@ public class MainActivity extends AppCompatActivity
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), "Erro!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.strError + error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-            //add request to queue
             requestQueue.add(jsonObjectRequest);
 
-            txtTitle.setText("Desafios");
+            txtTitle.setText(R.string.strChallenge);
             txtTitle.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/sweetsensations.ttf"));
 
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(null);
 
             DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
 
@@ -167,7 +145,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             Intent intent = new Intent(mContext, HomeActivity.class);
             mContext.startActivity(intent);
-            Log.d(TAG, "onCreate: starting in Home.");
         }
     }
 
@@ -190,18 +167,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button_green, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_my_looks) {
@@ -226,7 +198,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupFooterNavigationView(){
-        Log.d(TAG,"setupFooterNavigationView: setting up FooterNavigationView.");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.footerNavigation);
         FooterNavigationViewHelper.setupFooterNavigationView(bottomNavigationViewEx);
         FooterNavigationViewHelper.enableNavigation(mContext,bottomNavigationViewEx);

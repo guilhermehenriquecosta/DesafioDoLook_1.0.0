@@ -52,7 +52,6 @@ public class DuelActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_duel);
-        Log.d(TAG, "onCreate: starting in Duel.");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbarBack);
         ImageView icoBack = (ImageView)toolbar.findViewById(R.id.ico_bar_back);
@@ -62,13 +61,6 @@ public class DuelActivity extends AppCompatActivity {
         FloatingActionButton btnVoteLeft = (FloatingActionButton) findViewById(R.id.ico_confirmLeft);
         FloatingActionButton btnVoteTie = (FloatingActionButton) findViewById(R.id.ico_confirmTie);
         FloatingActionButton btnVoteRight = (FloatingActionButton) findViewById(R.id.ico_confirmRight);
-
-        /*Bundle extras = getIntent().getExtras();
-        if(extras != null && extras.containsKey("photoDuelLeft") && extras.containsKey("photoDuelRight")) {
-            netImgViewLeft.setImageUrl(extras.getSerializable("photoDuelLeft").toString() , VolleySingleton.getInstance(mContext).getImageLoader());
-            netImgViewRight.setImageUrl(extras.getSerializable("photoDuelRight").toString() , VolleySingleton.getInstance(mContext).getImageLoader());
-        }else
-            Toast.makeText(mContext, "Erro!", Toast.LENGTH_SHORT).show();*/
 
         Intent intent = getIntent();
         final Duel duelSelect = (Duel) intent.getSerializableExtra("duelSelect");
@@ -100,9 +92,7 @@ public class DuelActivity extends AppCompatActivity {
             }
         });
 
-
-
-        txtTitle.setText("Duel");
+        txtTitle.setText(R.string.strDuel);
         txtTitle.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/sweetsensations.ttf"));
 
         setSupportActionBar(toolbar);

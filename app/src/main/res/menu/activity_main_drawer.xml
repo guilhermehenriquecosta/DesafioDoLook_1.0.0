@@ -4,13 +4,13 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_my_looks"
-            android:title="Meus Looks" />
+            android:title="@string/strMyLooks" />
         <item
             android:id="@+id/nav_about"
-            android:title="Sobre" />
+            android:title="@string/strAbout" />
         <item
             android:id="@+id/nav_logoff"
-            android:title="Sair" />
+            android:title="@string/strExit" />
     </group>
 
 </menu>

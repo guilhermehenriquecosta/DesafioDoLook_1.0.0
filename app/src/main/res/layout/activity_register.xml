@@ -23,7 +23,7 @@
         android:layout_marginBottom="5dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="Enter with an e-mail" />
+        android:hint="@string/strHintEmail" />
 
     <EditText
         android:id="@+id/edtUserRegister"
@@ -34,7 +34,7 @@
         android:layout_marginBottom="5dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="Enter with an username" />
+        android:hint="@string/strHintUsername" />
 
     <EditText
         android:id="@+id/edtPasswordRegister"
@@ -45,7 +45,7 @@
         android:layout_marginBottom="5dp"
         android:ems="10"
         android:inputType="textPassword"
-        android:hint="Enter with a password"/>
+        android:hint="@string/strHintPassword"/>
 
     <EditText
         android:id="@+id/edtPasswordConfirm"
@@ -55,7 +55,7 @@
         android:layout_marginEnd="20dp"
         android:ems="10"
         android:inputType="textPassword"
-        android:hint="Confirm the password"/>
+        android:hint="@string/strHintConfirmPassword"/>
 
     <Button
         android:id="@+id/btnRegistrar"
@@ -66,7 +66,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/button_green"
         android:textColor="@color/colorWhite"
-        android:text="REGISTER" />
+        android:text="@string/strSignOut" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -77,7 +77,7 @@
             android:id="@+id/txtLinkBackRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Back to home"
+            android:text="@string/strBackToHome"
             android:textSize="18dp"
             android:gravity="center_horizontal|bottom"
             android:layout_gravity="bottom"/>

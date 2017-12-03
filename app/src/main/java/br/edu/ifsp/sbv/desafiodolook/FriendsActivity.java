@@ -61,7 +61,6 @@ public class FriendsActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "onCreate: starting in Friends.");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
@@ -72,7 +71,6 @@ public class FriendsActivity extends AppCompatActivity
         SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
         int userID = preferences.getInt("userID", 0);
 
-        //String url="http://www.appointweb.com/desafioDoLookApp/controller/album/get_album.php";
         String url="http://appointweb.com/Imagem/testImagens.json";
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -84,20 +82,16 @@ public class FriendsActivity extends AppCompatActivity
                         List<Friend> listFriends = new ArrayList<>();
 
                         try {
-                            JSONObject jsonFriends =
-                                    response.getJSONObject("users");
-                            JSONArray jsonFriend =
-                                    jsonFriends.getJSONArray("userInfo");
+                            JSONObject jsonFriends = response.getJSONObject("users");
+                            JSONArray jsonFriend = jsonFriends.getJSONArray("userInfo");
 
                             for (int i = 0; i < jsonFriend.length(); i++) {
-                                JSONObject jsonFriendItem =
-                                        jsonFriend.getJSONObject(i);
-                                Integer userInfoID  =
-                                        Integer.parseInt(jsonFriendItem.getString("userInfoID"));
-                                String thumbnail =
-                                        jsonFriendItem.getString("urlPicture");
-
+                                JSONObject jsonFriendItem = jsonFriend.getJSONObject(i);
+                                Integer userInfoID  = Integer.parseInt(jsonFriendItem.getString("userInfoID"));
+                                String thumbnail = jsonFriendItem.getString("urlPicture");
                                 Friend friend = new Friend(userInfoID, new User(userInfoID), new User(userInfoID,"adriel_sccp@hotmail.com","Adriel",thumbnail));
+                                listFriends.add(friend);
+                                listFriends.add(friend);
                                 listFriends.add(friend);
                             }
                         } catch (Exception e){
@@ -105,28 +99,24 @@ public class FriendsActivity extends AppCompatActivity
                         }
 
                         lvFriends.setAdapter(new FriendAdapter(getApplicationContext(), listFriends));
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Erro!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.strError + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-        //add request to queue
         requestQueue.add(jsonObjectRequest);
 
-
-        txtTitle.setText("Friends");
+        txtTitle.setText(R.string.strFriends);
         txtTitle.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/sweetsensations.ttf"));
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -148,9 +138,6 @@ public class FriendsActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button_green, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
@@ -159,7 +146,6 @@ public class FriendsActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_my_looks) {
@@ -184,7 +170,6 @@ public class FriendsActivity extends AppCompatActivity
     }
 
     private void setupFooterNavigationView(){
-        Log.d(TAG,"setupFooterNavigationView: setting up FooterNavigationView.");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.footerNavigation);
         FooterNavigationViewHelper.setupFooterNavigationView(bottomNavigationViewEx);
         FooterNavigationViewHelper.enableNavigation(mContext,bottomNavigationViewEx);

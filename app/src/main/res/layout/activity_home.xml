@@ -23,7 +23,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:background="@drawable/button_green"
-        android:text="SIGN IN"
+        android:text="@string/strSignIn"
         android:textColor="@color/colorWhite" />
 
     <Button
@@ -34,7 +34,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/button_blue"
-        android:text="SIGN UP"
+        android:text="@string/strSignOut"
         android:textColor="@color/colorWhite" />
 
     <LinearLayout
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:gravity="center_horizontal|bottom"
-            android:text="Continue without sign in"
+            android:text="@string/strContinueWithoutSignOut"
             android:textSize="18dp" />
 
     </LinearLayout>

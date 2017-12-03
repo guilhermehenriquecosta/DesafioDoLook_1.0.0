@@ -1,7 +1,34 @@
 <resources>
 
     <string name="app_name">Desafio do Look</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">navigation_drawer_open</string>
+    <string name="navigation_drawer_close">navigation_drawer_close</string>
+    <string name="strCamera">"Camera "</string>
+    <string name="strChallenge">"Desafios "</string>
+    <string name="strFriends">"Amigos "</string>
+    <string name="strRanking">"Ranking "</string>
+    <string name="strMyLooks">"Meus Looks "</string>
+    <string name="strAbout">"Sobre "</string>
+    <string name="strExit">"Sair "</string>
+    <string name="strProfile">"Perfil "</string>
+    <string name="strDuel">"Duelo "</string>
+    <string name="strSignIn">"ENTRAR"</string>
+    <string name="strSignOut">"CADASTRAR"</string>
+    <string name="strContinueWithoutSignOut">"Continuar sem cadastrar"</string>
+    <string name="strBackToHome">"Voltar a tela anterior"</string>
+    <string name="strHintUsername">"Informe seu nome de usuário"</string>
+    <string name="strHintPassword">"Informe sua senha"</string>
+    <string name="strHintEmail">"Informe seu e-mail"</string>
+    <string name="strHintConfirmPassword">"Confirme sua senha"</string>
+    <string name="strUserPasswordWrong">"Usuário e/ou senha inválidos!"</string>
+    <string name="strError">"Erro: "</string>
+    <string name="strUserPasswordNull">"Informe seu nome de usuário e sua senha para acessar."</string>
+    <string name="strRegisterFieldsNull">"Informe todos os campos para efetuar o cadastro."</string>
+    <string name="strPasswordsDifferents">"A senha confirmada está diferente da senha informada anteriormente."</string>
+    <string name="strErrorRegisterUser">"Erro ao cadastrar usuário."</string>
+    <string name="strErrorEmailExists">"O e-mail informado já se encontra registrado."</string>
+    <string name="strErrorUsernameExists">"O nome de usuário informado já se encontra registrado."</string>
+    <string name="strPhotoSendSuccess">"Sua foto foi enviada para os duelos."</string>
+    <string name="strPhotoSendFail">"Sua foto não pôde ser enviada para os duelos."</string>
 
 </resources>

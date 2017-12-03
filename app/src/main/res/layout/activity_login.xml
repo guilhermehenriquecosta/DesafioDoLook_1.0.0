@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:ems="10"
-            android:hint="Enter with username"
+            android:hint="@string/strHintUsername"
             android:inputType="textPersonName" />
     </LinearLayout>
 
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:ems="10"
-            android:hint="Enter with password"
+            android:hint="@string/strHintPassword"
             android:inputType="textPassword" />
 
     </LinearLayout>
@@ -71,7 +71,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/button_green"
-        android:text="SIGN IN"
+        android:text="@string/strSignIn"
         android:textColor="@color/colorWhite" />
 
     <LinearLayout
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:gravity="center_horizontal|bottom"
-            android:text="Back to home"
+            android:text="@string/strBackToHome"
             android:textSize="18dp" />
 
     </LinearLayout>

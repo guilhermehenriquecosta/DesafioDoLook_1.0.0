@@ -26,20 +26,16 @@ public class HomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Log.d(TAG, "onCreate: starting in Home.");
 
-        //Set layouts elements
         ImageView imgLogo = (ImageView)findViewById(R.id.imgLogo);
         Button btnLogin = (Button)findViewById(R.id.btnLogin);
         Button btnRegister = (Button)findViewById(R.id.btnRegister);
         TextView txtLinkTest = (TextView) findViewById(R.id.txtLinkTest);
 
-        //Set fonts of texts
         txtLinkTest.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/gravitybold.otf"));
         btnLogin.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/robotoblack.ttf"));
         btnRegister.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/robotoblack.ttf"));
 
-        //Set Listeners of elements
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

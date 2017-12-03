@@ -1,39 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/linLayout"
-        android:weightSum="100">
+        android:layout_marginTop="10dp"
+        android:id="@+id/linLayout">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/user_photo" />
 
         <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="25"
-            android:layout_marginStart="25dp">
-
-            <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/netImgViewFriend"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_weight="1" />
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="75"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp">
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="15dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="bottom"
                 android:orientation="vertical"
                 android:id="@+id/linLayout2">
 
@@ -41,8 +34,6 @@
                     android:id="@+id/textViewFriendName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingTop="@dimen/nav_header_vertical_spacing"
                     android:text="Android Studio"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -50,11 +41,14 @@
                     android:id="@+id/textViewFriendEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="android.studio@android.com" />
 
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
+    <!--<com.android.volley.toolbox.NetworkImageView-->
+        <!--android:id="@+id/netImgViewFriend"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"/>-->
 
 </LinearLayout>

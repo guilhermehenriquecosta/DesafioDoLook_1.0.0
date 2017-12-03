@@ -30,15 +30,16 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        Log.d(TAG, "onCreate: starting in About.");
 
         TextView txtAbout = (TextView)findViewById(R.id.txtAbout);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbarBack);
         ImageView icoBack = (ImageView)toolbar.findViewById(R.id.ico_bar_back);
         TextView txtTitle = (TextView)toolbar.findViewById(R.id.toolbar_title_back);
 
-        txtTitle.setText("About");
+        txtTitle.setText(R.string.strAbout);
         txtTitle.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/sweetsensations.ttf"));
+
+        txtAbout.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/robotomedium.ttf"));
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);

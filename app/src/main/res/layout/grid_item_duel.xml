@@ -5,20 +5,22 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="100dp"
         android:layout_margin="2dp"
         android:orientation="horizontal">
 
         <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/netImgView1"
-            android:layout_width="80dp"
-            android:layout_height="100dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".50"
             android:scaleType="centerCrop"/>
 
         <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/netImgView2"
-            android:layout_width="80dp"
-            android:layout_height="100dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".50"
             android:scaleType="centerCrop"/>
 
     </LinearLayout>

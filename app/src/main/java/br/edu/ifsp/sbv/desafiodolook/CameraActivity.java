@@ -68,7 +68,6 @@ public class CameraActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "onCreate: started.");
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -79,15 +78,14 @@ public class CameraActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        txtTitle.setText("Camera");
+        txtTitle.setText(R.string.strCamera);
         txtTitle.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/sweetsensations.ttf"));
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -119,8 +117,9 @@ public class CameraActivity extends AppCompatActivity
                     Uri.fromFile(arquivoFoto))
             );
             ajustaFoto(arquivoFoto);
+        } else if (requestCode == CAMERA && resultCode == 0) {
+            finish();
         }
-        Toast.makeText(mContext, "Informe seu username e sua senha para acessar.", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -135,9 +134,6 @@ public class CameraActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button_green, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
@@ -146,7 +142,6 @@ public class CameraActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_my_looks) {
@@ -171,7 +166,6 @@ public class CameraActivity extends AppCompatActivity
     }
 
     private void setupFooterNavigationView(){
-        Log.d(TAG,"setupFooterNavigationView: setting up FooterNavigationView.");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.footerNavigation);
         FooterNavigationViewHelper.setupFooterNavigationView(bottomNavigationViewEx);
         FooterNavigationViewHelper.enableNavigation(mContext,bottomNavigationViewEx);
@@ -192,44 +186,31 @@ public class CameraActivity extends AppCompatActivity
         int w = 0;
         int h = 0;
 
-        // redimensiona a imagem
-        Integer lateral = 256; // tamanho final da dimensao maior da imagem
+        Integer lateral = 256;
         try {
-            // joga a imagem em uma variavel
             bitmap = android.provider.MediaStore.Images.Media.getBitmap( cr, Uri.fromFile( arquivo ) );
 
-            //BitmapDrawable bmpd = new BitmapDrawable(bitmap);
-
-            // cria um stream pra salvar o arquivo
             FileOutputStream out = new FileOutputStream( arquivo.getPath() );
             ByteArrayOutputStream byteArrayOutputStreamObject  = new ByteArrayOutputStream();
 
-            // uma nova instancia do bitmap rotacionado
-            //Bitmap bmp = bmpd.getBitmap();
             Bitmap bmp = bitmap;
 
-                    //define um indice = 1 pois se der erro vai manter a imagem como esta.
             Integer idx = 1;
 
-            // reupera as dimensoes da imagem
             w = bmp.getWidth();
             h = bmp.getHeight();
 
-            // verifica qual a maior dimensao e divide pela lateral final para definir qual o indice de reducao
             if ( w >= h){
                 idx = w / lateral;
             } else {
                 idx = h / lateral;
             }
 
-            // acplica o indice de reducao nas novas dimensoes
             w = w / idx;
             h = h / idx;
 
-            // cria nova instancia da imagem ja redimensionada
             Bitmap bmpReduzido = Bitmap.createScaledBitmap(bmp, w, h, true);
 
-            // salva a imagem reduzida no disco
             bmpReduzido.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStreamObject);
 
             byte[] byteArrayVar = byteArrayOutputStreamObject.toByteArray();
@@ -245,27 +226,24 @@ public class CameraActivity extends AppCompatActivity
                     try
                     {
                         if(ObjDadosRetorno != null) {
-                            //Toast.makeText(objContexto, ObjDadosRetorno.get("return").toString(), Toast.LENGTH_LONG).show();
-
                             if(ObjDadosRetorno.has("status") && !ObjDadosRetorno.isNull("status")) {
-
                                 if(ObjDadosRetorno.get("status").equals("true")){
-                                    Toast.makeText(mContext, "SUCESSO!", Toast.LENGTH_LONG).show();
-                                }else{
-                                    Toast.makeText(mContext, "ERRO!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(mContext, R.string.strPhotoSendSuccess, Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(mContext, R.string.strPhotoSendFail, Toast.LENGTH_LONG).show();
                                 }
-
-                            }else
+                            } else {
                                 Toast.makeText(mContext, "Erro ao criar usúario!", Toast.LENGTH_LONG).show();
+                            }
                         }
                     } catch (Exception ex) {
-                        Toast.makeText(mContext, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, R.string.strError + ex.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
                 public void erroAssincrono(Context objContexto, Exception ex) {
-                    Toast.makeText(objContexto, "Erro: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(objContexto, R.string.strError + ex.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }).execute("http://www.appointweb.com/desafioDoLookApp/controller/album/create_album.php", data);
         } catch (FileNotFoundException e) {
@@ -277,4 +255,3 @@ public class CameraActivity extends AppCompatActivity
         }
     }
 }
-

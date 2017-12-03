@@ -25,7 +25,7 @@ public class FriendAdapter extends ArrayAdapter<Friend> {
     private List<Friend> listFriends = null;
 
     static class ViewHolder{
-        private NetworkImageView netImageViewFriend;
+//        private NetworkImageView netImageViewFriend;
         private TextView txtViewFriendName;
         private TextView txtViewFriendEmail;
     }
@@ -45,7 +45,7 @@ public class FriendAdapter extends ArrayAdapter<Friend> {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_item_friend, parent, false);
 
-            viewHolder.netImageViewFriend = (NetworkImageView) convertView.findViewById(R.id.netImgViewFriend);
+//            viewHolder.netImageViewFriend = (NetworkImageView) convertView.findViewById(R.id.netImgViewFriend);
             viewHolder.txtViewFriendName = (TextView) convertView.findViewById(R.id.textViewFriendName);
             viewHolder.txtViewFriendEmail = (TextView) convertView.findViewById(R.id.textViewFriendEmail);
             convertView.setTag(viewHolder);
@@ -53,7 +53,7 @@ public class FriendAdapter extends ArrayAdapter<Friend> {
             viewHolder = (FriendAdapter.ViewHolder) convertView.getTag();
         }
 
-        viewHolder.netImageViewFriend.setImageUrl(friend.getUserFollow().getUrlAvatar() , VolleySingleton.getInstance(context).getImageLoader());
+//        viewHolder.netImageViewFriend.setImageUrl(friend.getUserFollow().getUrlAvatar() , VolleySingleton.getInstance(context).getImageLoader());
         viewHolder.txtViewFriendName.setText(friend.getUserFollow().getUserName());
         viewHolder.txtViewFriendEmail.setText(friend.getUserFollow().getEmail());
 
