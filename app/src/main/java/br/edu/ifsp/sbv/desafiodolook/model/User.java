@@ -1,12 +1,13 @@
 package br.edu.ifsp.sbv.desafiodolook.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Adriel on 11/20/2017.
  */
 
-public class User {
+public class User implements Serializable {
 
     private Integer userID;
     private String email;

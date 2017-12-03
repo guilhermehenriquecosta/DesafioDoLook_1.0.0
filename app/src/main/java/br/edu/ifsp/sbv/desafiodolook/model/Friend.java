@@ -1,10 +1,12 @@
 package br.edu.ifsp.sbv.desafiodolook.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Adriel on 12/1/2017.
  */
 
-public class Friend {
+public class Friend implements Serializable {
     private int friendID;
     private User userCurrent;
     private User userFollow;

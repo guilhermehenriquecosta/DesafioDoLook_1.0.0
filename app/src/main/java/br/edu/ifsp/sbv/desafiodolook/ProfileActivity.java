@@ -38,8 +38,10 @@ import java.util.List;
 
 import br.edu.ifsp.sbv.desafiodolook.adapter.DuelAdapter;
 import br.edu.ifsp.sbv.desafiodolook.adapter.PhotoAdapter;
+import br.edu.ifsp.sbv.desafiodolook.connection.VolleySingleton;
 import br.edu.ifsp.sbv.desafiodolook.model.Album;
 import br.edu.ifsp.sbv.desafiodolook.model.Duel;
+import br.edu.ifsp.sbv.desafiodolook.model.Friend;
 
 /**
  * Created by Guilherme on 15/11/2017.
@@ -58,13 +60,20 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbarBack);
-        ImageView icoBack = (ImageView)toolbar.findViewById(R.id.ico_bar_back);
-        TextView txtTitle = (TextView)toolbar.findViewById(R.id.toolbar_title_back);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarBack);
+        ImageView icoBack = (ImageView) toolbar.findViewById(R.id.ico_bar_back);
+        TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title_back);
         lvPhotos = (ListView) findViewById(R.id.lvPhotos);
 
-        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
-        int userID = preferences.getInt("userID", 0);
+        Intent intent = getIntent();
+        final Friend userSelect = (Friend) intent.getSerializableExtra("userSelect");
+
+        if (userSelect != null) {
+            int userID = userSelect.getFriendID();
+        } else {
+            SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
+            int userID = preferences.getInt("userID", 0);
+        }
 
         String url="http://appointweb.com/Imagem/testImagens.json";
 

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,9 +38,11 @@ import java.util.List;
 
 import br.edu.ifsp.sbv.desafiodolook.R;
 import br.edu.ifsp.sbv.desafiodolook.FooterNavigationViewHelper;
+import br.edu.ifsp.sbv.desafiodolook.adapter.DuelAdapter;
 import br.edu.ifsp.sbv.desafiodolook.adapter.FriendAdapter;
 import br.edu.ifsp.sbv.desafiodolook.adapter.PhotoAdapter;
 import br.edu.ifsp.sbv.desafiodolook.model.Album;
+import br.edu.ifsp.sbv.desafiodolook.model.Duel;
 import br.edu.ifsp.sbv.desafiodolook.model.Friend;
 import br.edu.ifsp.sbv.desafiodolook.model.User;
 
@@ -79,7 +82,7 @@ public class FriendsActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        List<Friend> listFriends = new ArrayList<>();
+                        final List<Friend> listFriends = new ArrayList<>();
 
                         try {
                             JSONObject jsonFriends = response.getJSONObject("users");
@@ -99,6 +102,16 @@ public class FriendsActivity extends AppCompatActivity
                         }
 
                         lvFriends.setAdapter(new FriendAdapter(getApplicationContext(), listFriends));
+
+                        lvFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Intent intent = new Intent(mContext, ProfileActivity.class);
+                                Friend userSelect = listFriends.get(position);
+                                intent.putExtra("userSelect", userSelect);
+                                mContext.startActivity(intent);
+                            }
+                        });
                     }
                 },
                 new Response.ErrorListener() {
