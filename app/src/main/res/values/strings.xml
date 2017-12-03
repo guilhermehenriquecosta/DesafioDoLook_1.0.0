@@ -30,5 +30,6 @@
     <string name="strErrorUsernameExists">"O nome de usuário informado já se encontra registrado."</string>
     <string name="strPhotoSendSuccess">"Sua foto foi enviada para os duelos."</string>
     <string name="strPhotoSendFail">"Sua foto não pôde ser enviada para os duelos."</string>
+    <string name="strErrorRegister">"Esta funcionalidade está diponível apenas para usuários cadastrados."</string>
 
 </resources>

@@ -64,6 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarBack);
+        TextView txtAddDel = (TextView) findViewById(R.id.txtAddDel);
         ImageView icoBack = (ImageView) toolbar.findViewById(R.id.ico_bar_back);
         TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title_back);
         lvPhotos = (ListView) findViewById(R.id.lvPhotos);
@@ -74,9 +75,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (userSelect != null) {
             userID = userSelect.getFriendID();
+            txtAddDel.setVisibility(View.VISIBLE);
         } else {
             SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
             userID = preferences.getInt("userID", 0);
+            txtAddDel.setVisibility(View.INVISIBLE);
         }
 
         String url="http://www.appointweb.com/desafioDoLookApp/controller/album/get_album.php?userID=" + userID;

@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -113,8 +114,8 @@ public class CameraActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA && resultCode == RESULT_OK) {
             sendBroadcast(new Intent(
-                    Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                    Uri.fromFile(arquivoFoto))
+                Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                Uri.fromFile(arquivoFoto))
             );
             ajustaFoto(arquivoFoto);
         }
@@ -146,8 +147,15 @@ public class CameraActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_looks) {
-            Intent intent1 = new Intent(mContext, ProfileActivity.class);
-            mContext.startActivity(intent1);
+            SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
+            int userID = preferences.getInt("userID",0);
+
+            if (userID == 0) {
+                Toast.makeText(mContext, R.string.strErrorRegister, Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent1 = new Intent(mContext, ProfileActivity.class);
+                mContext.startActivity(intent1);
+            }
         } else if (id == R.id.nav_about) {
             Intent intent1 = new Intent(mContext, AboutActivity.class);
             mContext.startActivity(intent1);
@@ -167,9 +175,15 @@ public class CameraActivity extends AppCompatActivity
     }
 
     private void setupFooterNavigationView(){
+        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
+        int userID = preferences.getInt("userID",0);
+
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.footerNavigation);
         FooterNavigationViewHelper.setupFooterNavigationView(bottomNavigationViewEx);
-        FooterNavigationViewHelper.enableNavigation(mContext,bottomNavigationViewEx);
+        FooterNavigationViewHelper.enableNavigation(mContext,bottomNavigationViewEx,userID);
+        Menu menu = bottomNavigationViewEx.getMenu();
+        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
+        menuItem.setChecked(true);
     }
 
     private File criarArquivo() throws IOException {

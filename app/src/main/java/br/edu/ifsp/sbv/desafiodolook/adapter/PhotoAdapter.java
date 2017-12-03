@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import br.edu.ifsp.sbv.desafiodolook.R;
@@ -52,7 +53,7 @@ public class PhotoAdapter extends ArrayAdapter<Album> {
         }
 
         viewHolder.netImageViewPhoto.setImageUrl(photo.getUrlPicture() , VolleySingleton.getInstance(context).getImageLoader());
-        viewHolder.txtViewDate.setText(photo.getDateCreation().toString());
+        viewHolder.txtViewDate.setText(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(photo.getDateCreation()));
 
         return convertView;
     }

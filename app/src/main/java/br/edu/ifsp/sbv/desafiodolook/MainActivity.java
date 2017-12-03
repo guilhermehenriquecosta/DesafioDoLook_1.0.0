@@ -177,8 +177,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_looks) {
-            Intent intent1 = new Intent(mContext, ProfileActivity.class);
-            mContext.startActivity(intent1);
+            SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
+            int userID = preferences.getInt("userID",0);
+
+            if (userID == 0) {
+                Toast.makeText(mContext, R.string.strErrorRegister, Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent1 = new Intent(mContext, ProfileActivity.class);
+                mContext.startActivity(intent1);
+            }
         } else if (id == R.id.nav_about) {
             Intent intent1 = new Intent(mContext, AboutActivity.class);
             mContext.startActivity(intent1);
@@ -198,9 +205,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupFooterNavigationView(){
+        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
+        int userID = preferences.getInt("userID",0);
+
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.footerNavigation);
         FooterNavigationViewHelper.setupFooterNavigationView(bottomNavigationViewEx);
-        FooterNavigationViewHelper.enableNavigation(mContext,bottomNavigationViewEx);
+        FooterNavigationViewHelper.enableNavigation(mContext,bottomNavigationViewEx,userID);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);

@@ -34,7 +34,7 @@
                 android:src="@drawable/user_photo" />
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="195dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="15dp"
@@ -60,6 +60,15 @@
 
                 </LinearLayout>
             </RelativeLayout>
+            <TextView
+                android:layout_marginStart="5dp"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:text="+"
+                android:textSize="30dp"
+                android:id="@+id/txtAddDel"/>
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
