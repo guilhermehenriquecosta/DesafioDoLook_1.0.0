@@ -45,6 +45,7 @@ import br.edu.ifsp.sbv.desafiodolook.connection.VolleySingleton;
 import br.edu.ifsp.sbv.desafiodolook.model.Album;
 import br.edu.ifsp.sbv.desafiodolook.model.Duel;
 import br.edu.ifsp.sbv.desafiodolook.model.Friend;
+import br.edu.ifsp.sbv.desafiodolook.model.User;
 
 /**
  * Created by Guilherme on 15/11/2017.
@@ -57,6 +58,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Context mContext = ProfileActivity.this;
     private ListView lvPhotos;
+    private User userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,19 +70,25 @@ public class ProfileActivity extends AppCompatActivity {
         ImageView icoBack = (ImageView) toolbar.findViewById(R.id.ico_bar_back);
         TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title_back);
         lvPhotos = (ListView) findViewById(R.id.lvPhotos);
+        TextView txtViewNameProfile = (TextView) findViewById(R.id.txtViewNameProfile);
+        TextView txtViewEmailProfile = (TextView) findViewById(R.id.txtViewEmailProfile);
 
         Intent intent = getIntent();
         final Friend userSelect = (Friend) intent.getSerializableExtra("userSelect");
         final int userID;
 
         if (userSelect != null) {
-            userID = userSelect.getFriendID();
+            userID = userSelect.getUserFollow().getUserID();
             txtAddDel.setVisibility(View.VISIBLE);
         } else {
             SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
             userID = preferences.getInt("userID", 0);
             txtAddDel.setVisibility(View.INVISIBLE);
         }
+
+        getUserProfile(userID, txtViewNameProfile, txtViewEmailProfile);
+//        txtViewNameProfile.setText(userProfile.getUserName());
+//        txtViewEmailProfile.setText(userProfile.getEmail());
 
         String url="http://www.appointweb.com/desafioDoLookApp/controller/album/get_album.php?userID=" + userID;
 
@@ -140,5 +148,44 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         finish();
+    }
+
+    private void getUserProfile(int userID, final TextView txtViewNameProfile, final TextView txtViewEmailProfile){
+
+        String url = "http://www.appointweb.com/desafioDoLookApp/controller/users/get_user.php?userID=" + userID;
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject jsonUser = response.getJSONObject("user");
+                            JSONArray jsonUsers = jsonUser.getJSONArray("users");
+
+                            JSONObject jsonUserItem = jsonUsers.getJSONObject(0);
+                            int userID = Integer.parseInt(jsonUserItem.getString("userInfoID"));
+                            String userName = jsonUserItem.getString("userName");
+                            String email = jsonUserItem.getString("email");
+                            String urlAvatar = jsonUserItem.getString("urlAvatar");
+
+                            txtViewNameProfile.setText(userName);
+                            txtViewEmailProfile.setText(email);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), R.string.strError + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        requestQueue.add(jsonObjectRequest);
+
     }
 }
