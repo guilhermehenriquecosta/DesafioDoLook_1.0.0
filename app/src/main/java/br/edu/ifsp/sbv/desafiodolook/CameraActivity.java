@@ -120,6 +120,8 @@ public class CameraActivity extends AppCompatActivity
             ajustaFoto(arquivoFoto);
         }
         if (requestCode == CAMERA) {
+//            Intent intent1 = new Intent(mContext, MainActivity.class);
+//            mContext.startActivity(intent1);
             finish();
         }
     }
@@ -167,6 +169,7 @@ public class CameraActivity extends AppCompatActivity
             editor.commit();
             Intent intent1 = new Intent(mContext, HomeActivity.class);
             mContext.startActivity(intent1);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -269,4 +272,15 @@ public class CameraActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+////        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
+////        boolean isLogged = preferences.getBoolean("isLogged",false);
+////        if (!isLogged) {
+////            finish();
+////        }
+//        finish();
+//    }
 }

@@ -68,7 +68,7 @@ public class HomeActivity extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
-        finish();
+        finishAffinity();
     }
 
     @Override
