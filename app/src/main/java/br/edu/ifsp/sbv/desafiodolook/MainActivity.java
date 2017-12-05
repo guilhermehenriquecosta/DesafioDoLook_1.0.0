@@ -28,6 +28,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.CircularNetworkImageView;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -40,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifsp.sbv.desafiodolook.adapter.DuelAdapter;
+import br.edu.ifsp.sbv.desafiodolook.connection.VolleySingleton;
 import br.edu.ifsp.sbv.desafiodolook.model.Album;
 import br.edu.ifsp.sbv.desafiodolook.model.Duel;
 
@@ -143,6 +145,14 @@ public class MainActivity extends AppCompatActivity
 
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
+            View headerView = navigationView.getHeaderView(0);
+            TextView txtViewNameProfile = (TextView) headerView.findViewById(R.id.txtViewNameNav);
+            TextView txtViewEmailProfile = (TextView) headerView.findViewById(R.id.txtViewEmailNav);
+            CircularNetworkImageView netImgViewProfile = (CircularNetworkImageView) headerView.findViewById(R.id.netImgViewProfileNav);
+
+            preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
+            int userID = preferences.getInt("userID", 0);
+            getUserProfile(userID, txtViewNameProfile, txtViewEmailProfile, netImgViewProfile);
 
             setupFooterNavigationView();
         } else {
@@ -229,5 +239,44 @@ public class MainActivity extends AppCompatActivity
             finish();
         }
 //        finish();
+    }
+
+    private void getUserProfile(int userID, final TextView txtViewNameProfile, final TextView txtViewEmailProfile, final CircularNetworkImageView netImgViewProfile){
+
+        String url = "http://www.appointweb.com/desafioDoLookApp/controller/users/get_user.php?userID=" + userID;
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject jsonUser = response.getJSONObject("user");
+                            JSONArray jsonUsers = jsonUser.getJSONArray("users");
+
+                            JSONObject jsonUserItem = jsonUsers.getJSONObject(0);
+                            int userID = Integer.parseInt(jsonUserItem.getString("userInfoID"));
+                            String userName = jsonUserItem.getString("userName");
+                            String email = jsonUserItem.getString("email");
+                            String urlAvatar = jsonUserItem.getString("urlAvatar");
+
+                            txtViewNameProfile.setText(userName);
+                            txtViewEmailProfile.setText(email);
+                            netImgViewProfile.setImageUrl(urlAvatar, VolleySingleton.getInstance(mContext).getImageLoader());
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), R.string.strError + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        requestQueue.add(jsonObjectRequest);
     }
 }
