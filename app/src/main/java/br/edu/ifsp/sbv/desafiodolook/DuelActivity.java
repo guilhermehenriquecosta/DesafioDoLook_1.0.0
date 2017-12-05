@@ -27,13 +27,17 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifsp.sbv.desafiodolook.adapter.PhotoAdapter;
 import br.edu.ifsp.sbv.desafiodolook.connection.VolleySingleton;
+import br.edu.ifsp.sbv.desafiodolook.connection.WebserviceTask;
 import br.edu.ifsp.sbv.desafiodolook.model.Album;
 import br.edu.ifsp.sbv.desafiodolook.model.Duel;
 
@@ -71,24 +75,27 @@ public class DuelActivity extends AppCompatActivity {
         }else
             Toast.makeText(mContext, "Erro!", Toast.LENGTH_SHORT).show();
 
+        SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
+        final int userID = preferences.getInt("userID", 0);
+
         btnVoteLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "ID: " + duelSelect.getDuelID() + "v: 0",Toast.LENGTH_SHORT ).show();
+                insert(duelSelect.getDuelID(), userID,0);
             }
         });
 
         btnVoteTie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "ID: " + duelSelect.getDuelID() + "v: 2",Toast.LENGTH_SHORT ).show();
+                insert(duelSelect.getDuelID(), userID,2);
             }
         });
 
         btnVoteRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "ID: " + duelSelect.getDuelID() + "v: 1",Toast.LENGTH_SHORT ).show();
+                insert(duelSelect.getDuelID(), userID,1);
             }
         });
 
@@ -110,5 +117,44 @@ public class DuelActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         finish();
+    }
+
+    private void insert(int duelID, int userInfoID, int vote){
+        try {
+            JSONObject data = new JSONObject();
+
+            data.put("duelID", duelID);
+            data.put("userInfoID", userInfoID);
+            data.put("vote", vote);
+
+            new WebserviceTask(mContext, new WebserviceTask.RespostaAssincrona() {
+                @Override
+                public void fimProcessamento(Context objContexto, JSONObject ObjDadosRetorno) {
+                    try
+                    {
+                        if(ObjDadosRetorno != null) {
+                            if(ObjDadosRetorno.has("return") && !ObjDadosRetorno.isNull("return")) {
+                                if(ObjDadosRetorno.get("return").equals("true")){
+                                    Toast.makeText(mContext, R.string.strVoteSendSuccess, Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(mContext, R.string.strVoteSendFail, Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(mContext, "Erro ao inserir voto!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } catch (Exception ex) {
+                        Toast.makeText(mContext, R.string.strError + ex.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void erroAssincrono(Context objContexto, Exception ex) {
+                    Toast.makeText(objContexto, R.string.strError + ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }).execute("http://www.appointweb.com/desafioDoLookApp/controller/vote/insert_vote.php", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

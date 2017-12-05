@@ -31,5 +31,7 @@
     <string name="strPhotoSendSuccess">"Sua foto foi enviada para os duelos."</string>
     <string name="strPhotoSendFail">"Sua foto não pôde ser enviada para os duelos."</string>
     <string name="strErrorRegister">"Esta funcionalidade está diponível apenas para usuários cadastrados."</string>
+    <string name="strVoteSendSuccess">"Voto inserido com sucesso."</string>
+    <string name="strVoteSendFail">"Voto já computado."</string>
 
 </resources>

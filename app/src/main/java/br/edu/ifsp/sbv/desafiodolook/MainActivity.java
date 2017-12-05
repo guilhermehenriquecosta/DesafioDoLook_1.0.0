@@ -101,10 +101,10 @@ public class MainActivity extends AppCompatActivity
 
                                     Duel duel = new Duel(duelID, new Album(leftAlbumID, userInfoID1, urlPicture1), new Album(rightAlbumID, userInfoID2, urlPicture2));
                                     listDuel.add(duel);
+                                    /*listDuel.add(duel);
                                     listDuel.add(duel);
                                     listDuel.add(duel);
-                                    listDuel.add(duel);
-                                    listDuel.add(duel);
+                                    listDuel.add(duel);*/
                                 }
                             } catch (Exception e){
                                 e.printStackTrace();
