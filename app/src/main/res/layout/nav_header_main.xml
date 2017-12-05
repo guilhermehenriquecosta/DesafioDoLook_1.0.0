@@ -37,14 +37,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Android Studio"/>
+                android:text="Visitante"/>
 
             <TextView
                 android:id="@+id/txtViewEmailNav"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="android.studio@android.com" />
+                android:text="Faça seu cadastro e envie seus looks" />
 
         </LinearLayout>
 
