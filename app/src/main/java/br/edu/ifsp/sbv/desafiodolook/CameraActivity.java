@@ -120,8 +120,8 @@ public class CameraActivity extends AppCompatActivity
             ajustaFoto(arquivoFoto);
         }
         if (requestCode == CAMERA) {
-//            Intent intent1 = new Intent(mContext, MainActivity.class);
-//            mContext.startActivity(intent1);
+            Intent intent1 = new Intent(mContext, MainActivity.class);
+            mContext.startActivity(intent1);
             finish();
         }
     }

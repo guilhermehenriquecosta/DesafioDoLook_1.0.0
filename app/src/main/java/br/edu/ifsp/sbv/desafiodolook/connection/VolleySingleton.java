@@ -22,7 +22,7 @@ public class VolleySingleton {
     private VolleySingleton(Context context) {
         requestQueue = Volley.newRequestQueue(context);
         imageLoader = new ImageLoader(this.requestQueue, new ImageLoader.ImageCache() {
-            private final LruCache<String, Bitmap> lruCache = new LruCache<String, Bitmap>(30);
+            private final LruCache<String, Bitmap> lruCache = new LruCache<String, Bitmap>(200);
             //30 -> the maximum number of entries in the cache.
 
             public void putBitmap(String url, Bitmap bitmap) {
