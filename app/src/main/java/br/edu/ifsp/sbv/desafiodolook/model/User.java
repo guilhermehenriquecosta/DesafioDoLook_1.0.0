@@ -20,6 +20,10 @@ public class User implements Serializable {
     private String deviceID;
     private Boolean status;
     private Date dateCreation;
+    private int win;
+    private int loss;
+    private int tie;
+    private float per;
 
     public  User(){}
 
@@ -32,6 +36,17 @@ public class User implements Serializable {
         this.email = email;
         this.userName = userName;
         this.urlAvatar = urlAvatar;
+    }
+
+    public User(Integer userID, String email, String userName, String urlAvatar, int win, int tie, int loss, float per){
+        this.userID = userID;
+        this.email = email;
+        this.userName = userName;
+        this.urlAvatar = urlAvatar;
+        this.win = win;
+        this.tie = tie;
+        this.loss = loss;
+        this.per = per;
     }
 
     public Integer getUserID() {
@@ -120,5 +135,37 @@ public class User implements Serializable {
 
     public void setDateCreation(Date dateCreation) {
         this.dateCreation = dateCreation;
+    }
+
+    public int getWin() {
+        return win;
+    }
+
+    public void setWin(int win) {
+        this.win = win;
+    }
+
+    public int getLoss() {
+        return loss;
+    }
+
+    public void setLoss(int loss) {
+        this.loss = loss;
+    }
+
+    public int getTie() {
+        return tie;
+    }
+
+    public void setTie(int tie) {
+        this.tie = tie;
+    }
+
+    public float getPer() {
+        return per;
+    }
+
+    public void setPer(float per) {
+        this.per = per;
     }
 }

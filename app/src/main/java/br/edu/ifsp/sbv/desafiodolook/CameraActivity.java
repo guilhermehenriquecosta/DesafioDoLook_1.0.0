@@ -235,8 +235,11 @@ public class CameraActivity extends AppCompatActivity
 
             final String ConvertImage = Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
 
+            SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
+            int userID = preferences.getInt("userID", 0);
+
             data.put("encoded_string", ConvertImage);
-            data.put("userInfoID", 1);
+            data.put("userInfoID", userID);
 
             new WebserviceTask(mContext, new WebserviceTask.RespostaAssincrona() {
                 @Override

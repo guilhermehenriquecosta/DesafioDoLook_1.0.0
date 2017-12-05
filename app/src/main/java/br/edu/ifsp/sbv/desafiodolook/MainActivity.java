@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     private Context mContext = MainActivity.this;
     private GridView mGridView;
     private ListView lvFriends;
+    private ListView lvRanking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity
             mGridView = (GridView) findViewById(R.id.gridView);
             lvFriends = (ListView) findViewById(R.id.lvFriends);
             lvFriends.setVisibility(View.INVISIBLE);
+            lvRanking = (ListView) findViewById(R.id.lvRanking);
+            lvRanking.setVisibility(View.INVISIBLE);
 
             String url="http://www.appointweb.com/desafioDoLookApp/controller/duel/get_duel.php";
 

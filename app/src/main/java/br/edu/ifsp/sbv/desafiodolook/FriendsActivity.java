@@ -59,6 +59,7 @@ public class FriendsActivity extends AppCompatActivity
     private Context mContext = FriendsActivity.this;
     private ListView lvFriends;
     private GridView mGridView;
+    private ListView lvRanking;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +71,8 @@ public class FriendsActivity extends AppCompatActivity
         lvFriends = (ListView) findViewById(R.id.lvFriends);
         mGridView = (GridView) findViewById(R.id.gridView);
         mGridView.setVisibility(View.INVISIBLE);
+        lvRanking = (ListView) findViewById(R.id.lvRanking);
+        lvRanking.setVisibility(View.INVISIBLE);
 
         SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL",0);
         final int userID = preferences.getInt("userID", 0);

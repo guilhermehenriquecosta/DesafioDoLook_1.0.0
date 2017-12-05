@@ -15,13 +15,33 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.ifsp.sbv.desafiodolook.R;
 import br.edu.ifsp.sbv.desafiodolook.FooterNavigationViewHelper;
+import br.edu.ifsp.sbv.desafiodolook.adapter.FriendAdapter;
+import br.edu.ifsp.sbv.desafiodolook.adapter.RankingAdapter;
+import br.edu.ifsp.sbv.desafiodolook.model.Friend;
+import br.edu.ifsp.sbv.desafiodolook.model.User;
 
 /**
  * Created by Guilherme on 10/11/2017.
@@ -34,6 +54,9 @@ public class RankingActivity extends AppCompatActivity
     private static final int ACTIVITY_NUM = 3;
 
     private Context mContext = RankingActivity.this;
+    private GridView mGridView;
+    private ListView lvFriends;
+    private ListView lvRanking;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +65,56 @@ public class RankingActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView txtTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        lvRanking = (ListView) findViewById(R.id.lvRanking);
+        mGridView = (GridView) findViewById(R.id.gridView);
+        mGridView.setVisibility(View.INVISIBLE);
+        lvFriends = (ListView) findViewById(R.id.lvFriends);
+        lvFriends.setVisibility(View.INVISIBLE);
+
+        String url="http://www.appointweb.com/desafioDoLookApp/controller/users/get_ranking.php";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        final List<User> listRanking = new ArrayList<>();
+
+                        try {
+                            JSONObject jsonRanking = response.getJSONObject("ranking");
+                            JSONArray jsonUsers = jsonRanking.getJSONArray("users");
+
+                            for (int i = 0; i < jsonUsers.length(); i++) {
+                                JSONObject jsonUserItem = jsonUsers.getJSONObject(i);
+
+                                int userInfoID  = Integer.parseInt(jsonUserItem.getString("userInfoID"));
+                                String userName = jsonUserItem.getString("userName");
+                                String email = jsonUserItem.getString("email");
+                                String urlAvatar = jsonUserItem.getString("urlAvatar");
+                                int win  = Integer.parseInt(jsonUserItem.getString("win"));
+                                int tie  = Integer.parseInt(jsonUserItem.getString("tie"));
+                                int loss  = Integer.parseInt(jsonUserItem.getString("loss"));
+                                float per  = Float.parseFloat(jsonUserItem.getString("per"));
+
+                                User user = new User(userInfoID, email, userName, urlAvatar, win, tie, loss, per);
+                                listRanking.add(user);
+                            }
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        lvRanking.setAdapter(new RankingAdapter(getApplicationContext(), listRanking));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), R.string.strError + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        requestQueue.add(jsonObjectRequest);
+
         txtTitle.setText(R.string.strRanking);
         txtTitle.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/sweetsensations.ttf"));
 

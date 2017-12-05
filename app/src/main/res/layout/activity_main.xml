@@ -37,6 +37,7 @@
 
             <include layout="@layout/content_main"/>
             <include layout="@layout/content_friend"/>
+            <include layout="@layout/content_ranking"/>
 
         </RelativeLayout>
 

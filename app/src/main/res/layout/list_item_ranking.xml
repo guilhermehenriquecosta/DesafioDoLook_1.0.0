@@ -19,8 +19,8 @@
             android:textAlignment="center"
             android:layout_gravity="center_vertical"/>
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profileImg"
+        <com.android.volley.toolbox.CircularNetworkImageView
+            android:id="@+id/netImgViewRanking"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"

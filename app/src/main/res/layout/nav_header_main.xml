@@ -17,8 +17,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageView"
+        <com.android.volley.toolbox.CircularNetworkImageView
+            android:id="@+id/netImgViewProfileNav"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerVertical="true"
@@ -33,14 +33,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/txtViewNameNav"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Android Studio"/>
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/txtViewEmailNav"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

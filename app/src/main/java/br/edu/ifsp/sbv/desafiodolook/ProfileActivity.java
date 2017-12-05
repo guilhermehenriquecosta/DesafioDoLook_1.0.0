@@ -26,6 +26,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.CircularNetworkImageView;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -72,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
         lvPhotos = (ListView) findViewById(R.id.lvPhotos);
         TextView txtViewNameProfile = (TextView) findViewById(R.id.txtViewNameProfile);
         TextView txtViewEmailProfile = (TextView) findViewById(R.id.txtViewEmailProfile);
+        CircularNetworkImageView netImgViewProfile = (CircularNetworkImageView) findViewById(R.id.netImgViewProfile);
 
         Intent intent = getIntent();
         final Friend userSelect = (Friend) intent.getSerializableExtra("userSelect");
@@ -86,9 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
             txtAddDel.setVisibility(View.INVISIBLE);
         }
 
-        getUserProfile(userID, txtViewNameProfile, txtViewEmailProfile);
-//        txtViewNameProfile.setText(userProfile.getUserName());
-//        txtViewEmailProfile.setText(userProfile.getEmail());
+        getUserProfile(userID, txtViewNameProfile, txtViewEmailProfile, netImgViewProfile);
 
         String url="http://www.appointweb.com/desafioDoLookApp/controller/album/get_album.php?userID=" + userID;
 
@@ -111,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 String dateCreationStr = jsonPhotoItem.getString("dateCreation");
                                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 Date dataCreation = format.parse(dateCreationStr);
-                                Album photo = new Album(albumID,userID, urlPicture,dataCreation);
+                                Album photo = new Album(albumID,userID, urlPicture, dataCreation);
                                 listPhotos.add(photo);
                             }
                         } catch (Exception e){
@@ -150,7 +150,7 @@ public class ProfileActivity extends AppCompatActivity {
         finish();
     }
 
-    private void getUserProfile(int userID, final TextView txtViewNameProfile, final TextView txtViewEmailProfile){
+    private void getUserProfile(int userID, final TextView txtViewNameProfile, final TextView txtViewEmailProfile, final CircularNetworkImageView netImgViewProfile){
 
         String url = "http://www.appointweb.com/desafioDoLookApp/controller/users/get_user.php?userID=" + userID;
 
@@ -172,6 +172,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                             txtViewNameProfile.setText(userName);
                             txtViewEmailProfile.setText(email);
+                            netImgViewProfile.setImageUrl(urlAvatar, VolleySingleton.getInstance(mContext).getImageLoader());
 
                         } catch (Exception e) {
                             e.printStackTrace();

@@ -7,46 +7,47 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.CircularNetworkImageView;
 
 import java.util.List;
 
 import br.edu.ifsp.sbv.desafiodolook.R;
 import br.edu.ifsp.sbv.desafiodolook.connection.VolleySingleton;
-import br.edu.ifsp.sbv.desafiodolook.model.Friend;
-import br.edu.ifsp.sbv.desafiodolook.model.Ranking;
+import br.edu.ifsp.sbv.desafiodolook.model.User;
 
 /**
  * Created by Guilherme on 03/12/2017.
  */
 
-public class RankingAdapter extends ArrayAdapter<Ranking> {
+public class RankingAdapter extends ArrayAdapter<User> {
 
     private Context context;
-    private List<Ranking> listRankings = null;
+    private List<User> listRanking = null;
 
     static class ViewHolder{
+        private CircularNetworkImageView netImageViewRanking;
         private TextView txtViewRankingPosition;
         private TextView txtViewRankingName;
         private TextView txtViewRankingEmail;
         private TextView txtViewRankingData;
     }
 
-    public RankingAdapter(Context context, List<Ranking> listRankings) {
-        super(context, 0, listRankings);
-        this.listRankings = listRankings;
+    public RankingAdapter(Context context, List<User> listRanking) {
+        super(context, 0, listRanking);
+        this.listRanking = listRanking;
         this.context = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         RankingAdapter.ViewHolder viewHolder = new RankingAdapter.ViewHolder();
-        Ranking ranking = listRankings.get(position);
+        User ranking = listRanking.get(position);
 
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_item_ranking, parent, false);
 
+            viewHolder.netImageViewRanking = (CircularNetworkImageView) convertView.findViewById(R.id.netImgViewRanking);
             viewHolder.txtViewRankingPosition = (TextView) convertView.findViewById(R.id.textViewRankingPosition);
             viewHolder.txtViewRankingName = (TextView) convertView.findViewById(R.id.textViewRankingName);
             viewHolder.txtViewRankingEmail = (TextView) convertView.findViewById(R.id.textViewRankingEmail);
@@ -56,10 +57,14 @@ public class RankingAdapter extends ArrayAdapter<Ranking> {
             viewHolder = (RankingAdapter.ViewHolder) convertView.getTag();
         }
 
-        viewHolder.txtViewRankingPosition.setText(ranking.getUserFollow().getUserName());
-        viewHolder.txtViewRankingName.setText(ranking.getUserFollow().getEmail());
-        viewHolder.txtViewRankingEmail.setText(ranking.getUserFollow().getUserName());
-        viewHolder.txtViewRankingData.setText(ranking.getUserFollow().getEmail());
+        viewHolder.netImageViewRanking.setImageUrl(ranking.getUrlAvatar() , VolleySingleton.getInstance(context).getImageLoader());
+        viewHolder.txtViewRankingPosition.setText(String.valueOf(position + 1));
+        viewHolder.txtViewRankingName.setText(ranking.getUserName());
+        viewHolder.txtViewRankingEmail.setText(ranking.getEmail());
+        viewHolder.txtViewRankingData.setText(String.valueOf(ranking.getWin() + " V, ") +
+                                                String.valueOf(ranking.getTie() + " E, ") +
+                                                String.valueOf(ranking.getLoss() + " D, ") +
+                                                String.valueOf(ranking.getPer() + "%"));
 
         return convertView;
     }
