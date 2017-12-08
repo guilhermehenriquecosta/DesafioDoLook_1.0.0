@@ -72,11 +72,22 @@ public class DuelActivity extends AppCompatActivity {
         if (duelSelect != null){
             netImgViewLeft.setImageUrl(duelSelect.getAlbumLeft().getUrlPicture() , VolleySingleton.getInstance(mContext).getImageLoader());
             netImgViewRight.setImageUrl(duelSelect.getAlbumRight().getUrlPicture() , VolleySingleton.getInstance(mContext).getImageLoader());
-        }else
+        } else {
             Toast.makeText(mContext, "Erro!", Toast.LENGTH_SHORT).show();
+        }
 
         SharedPreferences preferences = getSharedPreferences("mYpREFERENCES_DDL", 0);
         final int userID = preferences.getInt("userID", 0);
+
+        if (userID == 0) {
+            btnVoteLeft.setVisibility(View.INVISIBLE);
+            btnVoteRight.setVisibility(View.INVISIBLE);
+            btnVoteTie.setVisibility(View.INVISIBLE);
+        } else {
+            btnVoteLeft.setVisibility(View.VISIBLE);
+            btnVoteRight.setVisibility(View.VISIBLE);
+            btnVoteTie.setVisibility(View.VISIBLE);
+        }
 
         btnVoteLeft.setOnClickListener(new View.OnClickListener() {
             @Override
